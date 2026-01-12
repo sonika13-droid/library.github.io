@@ -1,1 +1,0 @@
-A library management system.
