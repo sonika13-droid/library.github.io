@@ -1,0 +1,1286 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMSIT&M Library - Modern</title>
+  <!-- RemixIcon for beautiful UI icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- CSS Variables & Reset --- */
+    :root {
+      --primary: #6366f1; /* Indigo */
+      --primary-dark: #4f46e5;
+      --secondary: #10b981; /* Emerald */
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --white: #ffffff;
+      --gray: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * { box-sizing: border-box; outline: none; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light);
+      background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20241007/pngtree-whimsical-library-interior-a-magical-retreat-surrounded-by-books-and-grand-image_16306778.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--dark);
+      margin: 0;
+      min-height: 100vh;
+      padding-top: 80px; /* Space for fixed header */
+    }
+
+    /* --- Glassmorphism Overlay --- */
+    .glass-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: -1;
+    }
+
+    /* --- Header & Navigation --- */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1002; /* Higher than overlay to be clickable */
+      box-shadow: var(--shadow);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .logo i { font-size: 1.8rem; }
+
+    /* Desktop Nav */
+    .desktop-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-link:hover { color: var(--primary); }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0; height: 2px;
+      bottom: -4px; left: 0;
+      background: var(--primary);
+      transition: width 0.3s;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    .btn-nav {
+      background: var(--primary);
+      color: white !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .btn-nav:hover { 
+      transform: translateY(-2px); 
+      background: var(--primary-dark);
+    }
+    .btn-nav::after { display: none; }
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--dark);
+    }
+
+    /* Mobile Nav Drawer */
+    .mobile-menu {
+      position: fixed;
+      top: 0; right: -100%; /* Hidden off-screen */
+      width: 280px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      z-index: 1001; /* Above overlay, below header */
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 5rem 1.5rem 2rem;
+    }
+    .mobile-menu.active { right: 0; }
+    
+    .mobile-menu .nav-link {
+      font-size: 1.1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu .btn-nav {
+      margin-top: 1rem;
+      text-align: center;
+      display: block;
+    }
+    
+    .close-menu {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    /* Overlay for mobile menu */
+    .menu-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000; /* Background layer */
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .menu-overlay.active { display: block; opacity: 1; }
+
+    /* --- Main Layout --- */
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .section { display: none; animation: fadeIn 0.4s ease-out; }
+    .section.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 1rem;
+    }
+
+    /* --- Forms & Inputs --- */
+    .search-bar {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18' fill='%2394a3b8'%3E%3Cpath d='M10 18a8 8 0 100-16 8 8 0 000 16zm8-3l4-4'/%3E%3C/svg%3E") no-repeat 15px center;
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.3s;
+    }
+    .search-bar:focus {
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      transition: border 0.3s;
+    }
+    input:focus, select:focus { border-color: var(--primary); }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    button:active { transform: scale(0.98); }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-success { background: var(--secondary); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-warning { background: var(--warning); color: white; }
+    .btn-outline { background: white; border: 1px solid var(--border); color: var(--dark); }
+    .btn-outline:hover { background: var(--light); }
+
+    /* --- Cards & Lists --- */
+    .book-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
+    }
+    
+    .book-item.overdue { border-left: 5px solid var(--danger); }
+    .book-item.pending { border-left: 5px solid var(--warning); }
+    
+    .book-icon {
+      width: 45px; height: 45px;
+      background: #eff6ff;
+      color: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .book-info { flex-grow: 1; }
+    .book-info strong { display: block; font-size: 1.1rem; color: var(--dark); margin-bottom: 0.2rem; }
+    .book-info span { font-size: 0.9rem; color: var(--gray); display: block; }
+    
+    .stock-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-top: 0.3rem;
+    }
+    .stock-badge.ok { background: #dcfce7; color: #166534; }
+    .stock-badge.low { background: #fee2e2; color: #991b1b; }
+
+    .book-action { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+    /* --- Tabs --- */
+    .category-tabs {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: none;
+    }
+    .category-tabs::-webkit-scrollbar { display: none; }
+
+    .tab-button {
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--gray);
+      white-space: nowrap;
+      transition: all 0.3s;
+    }
+    .tab-button.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    }
+
+    /* --- Login Page --- */
+    .login-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .role-buttons {
+      display: flex;
+      gap: 2rem;
+    }
+    .role-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      width: 200px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      border: 2px solid transparent;
+    }
+    .role-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+    .role-card i { font-size: 3rem; color: var(--primary); margin-bottom: 1rem; display: block; }
+
+    .login-form-box {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-form-box h3 { text-align: center; margin-top: 0; color: var(--primary); }
+
+    /* --- Manage Section --- */
+    .manage-books {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-top: 2rem;
+    }
+    .add-book-form {
+      display: grid;
+      grid-template-columns: 2fr 2fr 1fr 80px auto;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      align-items: end;
+    }
+
+    /* --- Toast & Modal --- */
+    #toast-container {
+      position: fixed;
+      top: 90px; right: 20px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow-hover);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      animation: slideIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      border-left: 5px solid var(--primary);
+      min-width: 300px;
+    }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 3000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(4px);
+    }
+    .modal-content {
+      background: white;
+      width: 90%; max-width: 500px;
+      margin: 8% auto;
+      border-radius: 20px;
+      padding: 0;
+      overflow: hidden;
+      animation: modalPop 0.3s ease-out;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    
+    .modal-header {
+      padding: 1.5rem;
+      background: var(--light);
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header h3 { margin: 0; color: var(--dark); }
+    .modal-body { padding: 2rem; }
+    .modal-footer {
+      padding: 1rem 2rem;
+      background: var(--light);
+      text-align: right;
+      display: flex; justify-content: flex-end; gap: 1rem;
+    }
+
+    /* --- Footer --- */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    /* --- Mobile Responsive Queries --- */
+    @media (max-width: 850px) {
+      .desktop-nav { display: none; }
+      .hamburger { display: block; }
+      .add-book-form { grid-template-columns: 1fr; }
+      .book-item { flex-direction: column; align-items: flex-start; }
+      .book-action { width: 100%; margin-top: 1rem; justify-content: flex-end; }
+      .book-icon { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glass-overlay"></div>
+
+  <!-- Header -->
+  <header>
+    <a href="#" onclick="showSection('home')" class="logo">
+      <i class="ri-book-open-line"></i> BMSIT&M
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="desktop-nav navigation">
+      <a href="#" class="nav-link" onclick="showSection('home')">Home</a>
+      <a href="#" class="nav-link" onclick="showSection('about')">About</a>
+      <a href="#" class="nav-link" onclick="showSection('contact')">Contact</a>
+      <a href="#" id="nav-dashboard-link" class="nav-link" onclick="showDashboard()" style="display:none;">Dashboard</a>
+      <button class="btn-nav" id="nav-login-btn" onclick="showSection('login')">Login</button>
+      <button class="btn-nav btn-danger" id="nav-logout-btn" onclick="logout()" style="display:none;">Logout</button>
+    </nav>
+
+    <!-- Hamburger Icon -->
+    <div class="hamburger" onclick="toggleMenu()">
+      <i class="ri-menu-line"></i>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="menu-overlay" onclick="closeMenu()"></div>
+  <div class="mobile-menu">
+    <i class="ri-close-line close-menu" onclick="closeMenu()"></i>
+    <a href="#" class="nav-link" onclick="navTo('home')">Home</a>
+    <a href="#" class="nav-link" onclick="navTo('about')">About</a>
+    <a href="#" class="nav-link" onclick="navTo('contact')">Contact</a>
+    <a href="#" class="nav-link" id="mobile-dash-link" onclick="navToDashboard()" style="display:none;">Dashboard</a>
+    <a href="#" class="btn-nav" id="mobile-login-btn" onclick="navTo('login')">Login</a>
+    <a href="#" class="btn-nav btn-danger" id="mobile-logout-btn" onclick="doLogout()" style="display:none;">Logout</a>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Home -->
+    <section id="home" class="section active">
+      <div class="hero" style="text-align: center;">
+        <img src="https://t3.ftcdn.net/jpg/08/90/46/32/360_F_890463230_u57G26OxcxvAGYxyYCpllrohnmSlBLN6.jpg" alt="Library" class="hero-image" style="max-width: 100%; height: auto; border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 2rem;">
+        <h2 style="border:none; font-size: 2.5rem; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; color: transparent;">The Importance of Books</h2>
+        <p style="font-size: 1.1rem; color: var(--gray); line-height: 1.6;">Books are foundation of knowledge, imagination, and progress. They open doors to new worlds, preserve wisdom of generations, and empower us to think critically and creatively.</p>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section">
+      <h2>About Our Library</h2>
+      <div class="book-item" style="cursor: default;">
+        <div class="book-info">
+          <p style="font-size: 1.05rem; line-height: 1.8;">The BMSIT&M Library is a hub of knowledge, supporting the academic and research needs of students and faculty. With a vast collection of books, journals, and digital resources, our library fosters a culture of learning and innovation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <h2>Contact Information</h2>
+      <div class="book-item" style="cursor: default;">
+        <i class="ri-user-smile-line book-icon"></i>
+        <div class="book-info">
+          <strong>Chief Librarian</strong>
+          <span>Dr. S. Ramesh</span>
+          <a href="mailto:ramesh@bmsit.ac.in" style="color: var(--primary); text-decoration: none;">ramesh@bmsit.ac.in</a>
+        </div>
+      </div>
+      <div class="book-item" style="cursor: default;">
+        <i class="ri-user-star-line book-icon" style="background: #fff7ed; color: var(--warning);"></i>
+        <div class="book-info">
+          <strong>Assistant Librarian</strong>
+          <span>Ms. Priya Nair</span>
+          <a href="mailto:priya.nair@bmsit.ac.in" style="color: var(--primary); text-decoration: none;">priya.nair@bmsit.ac.in</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Login -->
+    <section id="login" class="section">
+      <div class="login-wrapper">
+        <div class="role-buttons" id="role-selection">
+          <div class="role-card" onclick="showLoginForms('student')">
+            <i class="ri-student-line"></i>
+            <h3>Student</h3>
+          </div>
+          <div class="role-card" onclick="showLoginForms('staff')">
+            <i class="ri-briefcase-line"></i>
+            <h3>Staff</h3>
+          </div>
+        </div>
+
+        <form id="student-login" class="login-form-box" style="display:none" onsubmit="return login('student')">
+          <i class="ri-user-3-line" style="font-size: 3rem; color: var(--primary); display:block; text-align:center; margin-bottom:1rem;"></i>
+          <h3>Student Login</h3>
+          <input type="text" id="student-username" placeholder="Student ID" required style="margin-bottom: 1rem;">
+          <input type="password" id="student-password" placeholder="Password" required style="margin-bottom: 1rem;">
+          <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+          <p class="toast" style="margin-top: 1rem; width: 100%; min-width: auto; display: none;" id="student-message"></p>
+        </form>
+
+        <form id="staff-login" class="login-form-box" style="display:none" onsubmit="return login('staff')">
+          <i class="ri-admin-line" style="font-size: 3rem; color: var(--primary); display:block; text-align:center; margin-bottom:1rem;"></i>
+          <h3>Staff Login</h3>
+          <input type="text" id="staff-username" placeholder="Staff ID" required style="margin-bottom: 1rem;">
+          <input type="password" id="staff-password" placeholder="Password" required style="margin-bottom: 1rem;">
+          <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+          <p class="toast" style="margin-top: 1rem; width: 100%; min-width: auto; display: none;" id="staff-message"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Student Dashboard -->
+    <section id="student-dashboard" class="section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 style="margin:0;">My Dashboard</h2>
+      </div>
+      
+      <input type="search" id="student-search-bar" class="search-bar" placeholder="Search books..." oninput="searchStudentDashboard(event)">
+      
+      <div class="dashboard-grid">
+        <div>
+          <h3 style="font-size: 1.2rem; color: var(--gray); margin-bottom: 1rem;">My Issued Books</h3>
+          <ul id="student-issued-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+        </div>
+        
+        <div>
+          <h3 style="font-size: 1.2rem; color: var(--gray); margin-bottom: 1rem;">Available to Issue</h3>
+          <div id="category-tabs" class="category-tabs"></div>
+          <ul id="student-available-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Staff Dashboard -->
+    <section id="staff-dashboard" class="section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 style="margin:0;">Staff Portal</h2>
+      </div>
+
+      <input type="search" id="staff-search-bar" class="search-bar" placeholder="Search by ID or Title..." oninput="searchStaffDashboard(event)">
+      
+      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <div class="manage-books" style="margin-top: 0; padding: 1.5rem;">
+            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="ri-time-line" style="color: var(--warning);"></i> Pending Pickups</h3>
+            <ul id="staff-pickup-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+          </div>
+
+          <div class="manage-books" style="margin-top: 0; padding: 1.5rem;">
+            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="ri-exchange-line" style="color: var(--secondary);"></i> Pending Returns</h3>
+            <ul id="staff-return-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+          </div>
+        </div>
+
+        <div class="manage-books" style="padding: 1.5rem;">
+          <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="ri-file-list-3-line" style="color: var(--primary);"></i> Reorder Requests</h3>
+          <ul id="staff-requested-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+        </div>
+
+        <div class="manage-books" style="padding: 1.5rem;">
+          <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="ri-book-mark-line" style="color: var(--dark);"></i> Currently Issued</h3>
+          <ul id="staff-picked-up-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+        </div>
+      </div>
+
+      <div class="manage-books">
+        <h3 style="display: flex; align-items: center; gap: 0.5rem;"><i class="ri-edit-2-line" style="color: var(--primary);"></i> Manage Inventory</h3>
+        <form id="add-book-form" class="add-book-form" onsubmit="return addBook(event)">
+          <input type="text" id="new-book-title" placeholder="Book Title" required>
+          <input type="text" id="new-book-author" placeholder="Author" required>
+          <select id="new-book-category" required></select>
+          <input type="number" id="new-book-stock" placeholder="Qty" min="0" required>
+          <button type="submit" class="btn-success"><i class="ri-add-line"></i> Add</button>
+        </form>
+        <h4>All Books</h4>
+        <ul id="staff-all-books-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 BMSIT&M Library. Designed for Students & Staff.</p>
+  </footer>
+
+  <!-- UI Components -->
+  <div id="toast-container"></div>
+
+  <div id="app-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Details</h3>
+        <i class="ri-close-line" style="cursor: pointer; font-size: 1.5rem;" onclick="closeModal()"></i>
+      </div>
+      <div id="modal-body"></div>
+      <div id="modal-footer" class="modal-footer"></div>
+    </div>
+  </div>
+
+  <script>
+    /* --- Configuration & State --- */
+    const bookCategories = ['Computer Science', 'AI/ML', 'Electronics', 'Management', 'Other'];
+    let allBooks = [];
+    let issuedBooks = [];
+    let requestedBooks = [];
+    let currentUser = null;
+    
+    // Restocking State
+    let currentRestockBookId = null;
+    let currentRestockStudentId = null;
+
+    // UI State
+    let currentStudentCategoryFilter = 'All';
+    let currentStudentSearchQuery = '';
+    let currentStaffSearchQuery = '';
+
+    /* --- Initialization --- */
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDataFromLocalStorage();
+      showSection('home');
+    });
+
+    /* --- Storage Logic --- */
+    function saveDataToLocalStorage() {
+      localStorage.setItem('libraryAllBooks', JSON.stringify(allBooks));
+      localStorage.setItem('libraryIssuedBooks', JSON.stringify(issuedBooks));
+      localStorage.setItem('libraryRequestedBooks', JSON.stringify(requestedBooks));
+    }
+
+    function loadDataFromLocalStorage() {
+      const storedAll = localStorage.getItem('libraryAllBooks');
+      const storedIssued = localStorage.getItem('libraryIssuedBooks');
+      const storedRequested = localStorage.getItem('libraryRequestedBooks');
+
+      if (storedAll && storedIssued) {
+        allBooks = JSON.parse(storedAll);
+        issuedBooks = JSON.parse(storedIssued);
+        requestedBooks = storedRequested ? JSON.parse(storedRequested) : [];
+      } else {
+        // Seed Data
+        allBooks = [
+          { id: 1, title: 'Database System Concepts', author: 'Silberschatz', category: 'Computer Science', totalStock: 5 },
+          { id: 2, title: 'Operating System Concepts', author: 'Silberschatz', category: 'Computer Science', totalStock: 3 },
+          { id: 3, title: 'Deep Learning', author: 'Ian Goodfellow', category: 'AI/ML', totalStock: 4 },
+          { id: 4, title: 'Intro to Algorithms', author: 'Cormen', category: 'Computer Science', totalStock: 2 },
+          { id: 5, title: 'Clean Code', author: 'Robert C. Martin', category: 'Computer Science', totalStock: 0 },
+          { id: 6, title: 'Microelectronic Circuits', author: 'Sedra', category: 'Electronics', totalStock: 4 }
+        ];
+        const pastDate = new Date(); pastDate.setDate(pastDate.getDate() - 5);
+        const futureDate = new Date(); futureDate.setDate(futureDate.getDate() + 10);
+        issuedBooks = [
+          { issueId: 101, bookId: 1, studentId: 'student', dueDate: pastDate.toISOString().split('T')[0], status: 'Picked Up' },
+          { issueId: 102, bookId: 3, studentId: 'another-student', dueDate: futureDate.toISOString().split('T')[0], status: 'Picked Up' },
+          { issueId: 103, bookId: 2, studentId: 'student', dueDate: null, status: 'Pending Pickup' }
+        ];
+        saveDataToLocalStorage();
+      }
+    }
+
+    function getAvailableStock(bookId) {
+      const book = allBooks.find(b => b.id === bookId);
+      if (!book) return 0;
+      const issuedCount = issuedBooks.filter(issue => issue.bookId === bookId).length;
+      return book.totalStock - issuedCount;
+    }
+
+    /* --- Navigation & Menu Logic --- */
+    function showSection(id) {
+      closeMenu();
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      const el = document.getElementById(id);
+      if(el) el.classList.add('active');
+      
+      if (id !== 'login') {
+        document.getElementById('student-login').style.display = 'none';
+        document.getElementById('staff-login').style.display = 'none';
+        document.getElementById('role-selection').style.display = 'flex';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMenu() {
+      const menu = document.querySelector('.mobile-menu');
+      const overlay = document.querySelector('.menu-overlay');
+      if (menu.classList.contains('active')) {
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+      } else {
+        menu.classList.add('active');
+        overlay.classList.add('active');
+      }
+    }
+
+    function closeMenu() {
+      document.querySelector('.mobile-menu').classList.remove('active');
+      document.querySelector('.menu-overlay').classList.remove('active');
+    }
+
+    function navTo(id) { showSection(id); }
+    function navToDashboard() { showDashboard(); }
+    function doLogout() { logout(); }
+
+    /* --- Login --- */
+    function showLoginForms(role) {
+      document.getElementById('student-login').style.display = role === 'student' ? 'block' : 'none';
+      document.getElementById('staff-login').style.display = role === 'staff' ? 'block' : 'none';
+      document.getElementById('role-selection').style.display = 'none';
+    }
+
+    function login(role) {
+      const username = document.getElementById(`${role}-username`).value;
+      const password = document.getElementById(`${role}-password`).value;
+      const msgEl = document.getElementById(`${role}-message`);
+
+      const validCreds = { student: { u: 'student', p: 'student123' }, staff: { u: 'staff', p: 'staff123' } };
+
+      if (username === validCreds[role].u && password === validCreds[role].p) {
+        currentUser = { id: username, role: role };
+        document.getElementById('nav-login-btn').style.display = 'none';
+        document.getElementById('nav-logout-btn').style.display = 'inline-flex';
+        document.getElementById('nav-dashboard-link').style.display = 'inline-flex';
+        
+        document.getElementById('mobile-login-btn').style.display = 'none';
+        document.getElementById('mobile-logout-btn').style.display = 'inline-flex';
+        document.getElementById('mobile-dash-link').style.display = 'block';
+
+        currentStudentCategoryFilter = 'All';
+        currentStudentSearchQuery = '';
+        currentStaffSearchQuery = '';
+        document.getElementById('student-search-bar').value = '';
+        document.getElementById('staff-search-bar').value = '';
+
+        showToast(`Welcome back, ${role}!`, 'success');
+        showDashboard();
+      } else {
+        msgEl.style.display = 'block';
+        msgEl.innerText = 'Invalid credentials';
+        showToast('Login failed', 'error');
+      }
+      return false; 
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('nav-login-btn').style.display = 'inline-flex';
+      document.getElementById('nav-logout-btn').style.display = 'none';
+      document.getElementById('nav-dashboard-link').style.display = 'none';
+      
+      document.getElementById('mobile-login-btn').style.display = 'inline-flex';
+      document.getElementById('mobile-logout-btn').style.display = 'none';
+      document.getElementById('mobile-dash-link').style.display = 'none';
+
+      showSection('home');
+      showToast('Logged out successfully', 'info');
+    }
+
+    function showDashboard() {
+      if (!currentUser) return;
+      if (currentUser.role === 'student') {
+        renderStudentDashboard();
+        showSection('student-dashboard');
+      } else {
+        renderStaffDashboard();
+        showSection('staff-dashboard');
+      }
+    }
+
+    /* --- Student Logic --- */
+    function renderStudentDashboard() {
+      const issuedEl = document.getElementById('student-issued-list');
+      const availableEl = document.getElementById('student-available-list');
+      const tabsEl = document.getElementById('category-tabs');
+      const query = currentStudentSearchQuery;
+
+      issuedEl.innerHTML = '';
+      const myBooks = issuedBooks.filter(b => b.studentId === currentUser.id);
+      const filteredMyBooks = myBooks.filter(issue => {
+        const book = allBooks.find(b => b.id === issue.bookId);
+        return book && (book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query));
+      });
+
+      if (filteredMyBooks.length === 0) {
+        issuedEl.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--gray);">No issued books found.</div>`;
+      } else {
+        filteredMyBooks.forEach(issue => {
+          const book = allBooks.find(b => b.id === issue.bookId);
+          const isPending = issue.status === 'Pending Pickup';
+          const isOverdue = !isPending && (new Date(issue.dueDate) < new Date());
+          const isReturning = issue.status === 'Pending Return';
+
+          let statusHTML = `<span>Due: ${issue.dueDate || 'N/A'}</span>`;
+          let btnHTML = '';
+          let badge = '';
+
+          if (isPending) {
+            statusHTML = `<span class="stock-badge low">Pending Pickup</span>`;
+            btnHTML = `<button class="btn-danger" onclick="cancelIssueRequest(event, ${issue.issueId})">Cancel</button>`;
+          } else if (isReturning) {
+            statusHTML = `<span class="stock-badge low">Returning...</span>`;
+            btnHTML = `<button class="btn-outline" disabled>Pending</button>`;
+          } else {
+            if (isOverdue) { statusHTML += `<span class="stock-badge low" style="margin-left: 5px">OVERDUE</span>`; }
+            else { statusHTML += `<span class="stock-badge ok">Active</span>`; }
+            btnHTML = `<button class="btn-warning" onclick="returnBook(event, ${issue.issueId})"><i class="ri-arrow-left-line"></i> Return</button>`;
+          }
+
+          const li = document.createElement('li');
+          li.className = `book-item ${isPending || isReturning ? 'pending' : ''} ${isOverdue ? 'overdue' : ''}`;
+          li.onclick = () => showBookDetails(book.id);
+          li.innerHTML = `
+            <i class="ri-book-2-line book-icon"></i>
+            <div class="book-info">
+              <strong>${book.title}</strong>
+              <span>${book.author}</span>
+              ${statusHTML}
+            </div>
+            <div class="book-action">${btnHTML}</div>
+          `;
+          issuedEl.appendChild(li);
+        });
+      }
+
+      tabsEl.innerHTML = '';
+      const createTab = (cat) => {
+        const btn = document.createElement('button');
+        btn.className = `tab-button ${currentStudentCategoryFilter === cat ? 'active' : ''}`;
+        btn.innerText = cat;
+        btn.onclick = () => { currentStudentCategoryFilter = cat; renderStudentDashboard(); };
+        return btn;
+      };
+      tabsEl.appendChild(createTab('All'));
+      bookCategories.forEach(cat => tabsEl.appendChild(createTab(cat)));
+
+      availableEl.innerHTML = '';
+      const myActiveIds = issuedBooks.filter(b => b.studentId === currentUser.id).map(b => b.bookId);
+      const myRequestedIds = requestedBooks.filter(r => r.studentId === currentUser.id).map(r => r.bookId);
+
+      const filteredBooks = allBooks.filter(book => {
+        const matchSearch = book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query);
+        const matchCat = currentStudentCategoryFilter === 'All' || book.category === currentStudentCategoryFilter;
+        const notOwned = !myActiveIds.includes(book.id);
+        return matchSearch && matchCat && notOwned;
+      });
+
+      if (filteredBooks.length === 0) {
+        availableEl.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--gray);">No matching books found.</div>`;
+      } else {
+        filteredBooks.forEach(book => {
+          const stock = getAvailableStock(book.id);
+          const isRequested = myRequestedIds.includes(book.id);
+          const isOutOfStock = stock <= 0;
+
+          let btnHTML = '';
+          let stockText = `Stock: ${stock}`;
+          let badgeClass = stock > 0 ? 'ok' : 'low';
+          let badgeHTML = `<span class="stock-badge ${badgeClass}">${stockText}</span>`;
+
+          if (isRequested) {
+            btnHTML = `<button class="btn-danger" onclick="removeRequest(event, ${book.id})">Cancel Req</button>`;
+            badgeHTML = `<span class="stock-badge low">Requested</span>`;
+          } else if (isOutOfStock) {
+            btnHTML = `<button class="btn-warning" onclick="requestBook(event, ${book.id})">Request</button>`;
+            badgeHTML = `<span class="stock-badge low">Out of Stock</span>`;
+          } else {
+            btnHTML = `<button class="btn-success" onclick="issueBook(event, ${book.id})"><i class="ri-add-line"></i> Issue</button>`;
+          }
+
+          const li = document.createElement('li');
+          li.className = 'book-item';
+          li.onclick = () => showBookDetails(book.id);
+          li.innerHTML = `
+            <i class="ri-book-open-line book-icon"></i>
+            <div class="book-info">
+              <strong>${book.title}</strong>
+              <span>${book.author} • ${book.category}</span>
+              ${badgeHTML}
+            </div>
+            <div class="book-action">${btnHTML}</div>
+          `;
+          availableEl.appendChild(li);
+        });
+      }
+    }
+
+    /* --- Staff Logic --- */
+    function renderStaffDashboard() {
+      const pickupEl = document.getElementById('staff-pickup-list');
+      const returnEl = document.getElementById('staff-return-list');
+      const requestedEl = document.getElementById('staff-requested-list');
+      const pickedUpEl = document.getElementById('staff-picked-up-list');
+      const allBooksEl = document.getElementById('staff-all-books-list');
+      const catDropdown = document.getElementById('new-book-category');
+      const query = currentStaffSearchQuery;
+
+      const renderList = (items, el, type) => {
+        el.innerHTML = '';
+        const filtered = items.filter(item => {
+          const book = allBooks.find(b => b.id === (item.bookId || item.id));
+          const sId = (item.studentId || '').toLowerCase();
+          const bTitle = book ? book.title.toLowerCase() : '';
+          return sId.includes(query) || bTitle.includes(query);
+        });
+
+        if (filtered.length === 0) {
+          el.innerHTML = `<div style="text-align:center; padding: 1rem; color: var(--gray); font-size: 0.9rem;">No items.</div>`;
+          return;
+        }
+
+        filtered.forEach(item => {
+          let book, content;
+          
+          if (type === 'pickup') {
+            book = allBooks.find(b => b.id === item.bookId);
+            content = `
+              <div class="book-info"><strong>${book.title}</strong><span>Student: ${item.studentId}</span><span class="stock-badge low">Pending Pickup</span></div>
+              <div class="book-action"><button class="btn-success" onclick="confirmPickup(event, ${item.issueId})">Give</button></div>`;
+          } else if (type === 'return') {
+            book = allBooks.find(b => b.id === item.bookId);
+            content = `
+              <div class="book-info"><strong>${book.title}</strong><span>Student: ${item.studentId}</span><span class="stock-badge low">Returned</span></div>
+              <div class="book-action"><button class="btn-success" onclick="confirmReturn(event, ${item.issueId})">Confirm</button></div>`;
+          } else if (type === 'requested') {
+            book = allBooks.find(b => b.id === item.bookId);
+            content = `
+              <div class="book-info"><strong>${book.title}</strong><span>Student: ${item.studentId}</span><span>Date: ${item.requestDate}</span></div>
+              <div class="book-action">
+                <button class="btn-success" onclick="openRestockModal(event, ${item.bookId}, '${item.studentId}')">Restock</button>
+              </div>`;
+          } else if (type === 'pickedup') {
+            book = allBooks.find(b => b.id === item.bookId);
+            const isOverdue = new Date(item.dueDate) < new Date();
+            const badge = isOverdue ? 'low' : 'ok';
+            const status = isOverdue ? 'OVERDUE' : 'Active';
+            content = `
+              <div class="book-info"><strong>${book.title}</strong><span>Student: ${item.studentId}</span><span>Due: ${item.dueDate}</span><span class="stock-badge ${badge}">${status}</span></div>
+              <div class="book-action"><i class="ri-check-double-line" style="color:var(--success); font-size:1.2rem;"></i></div>`;
+          } else if (type === 'all') {
+            book = item;
+            const stock = getAvailableStock(book.id);
+            content = `
+              <div class="book-info"><strong>${book.title}</strong><span>Auth: ${book.author} • ID: ${book.id}</span><span class="stock-badge ${stock > 0 ? 'ok' : 'low'}">Stock: ${stock}/${book.totalStock}</span></div>
+              <div class="book-action">
+                <button class="btn-primary" onclick="editBook(event, ${book.id})"><i class="ri-pencil-line"></i></button>
+                <button class="btn-danger" onclick="deleteBook(event, ${book.id})"><i class="ri-delete-bin-line"></i></button>
+              </div>`;
+          }
+
+          const li = document.createElement('li');
+          li.className = `book-item ${type === 'pickedup' && new Date(item.dueDate) < new Date() ? 'overdue' : ''} ${['pickup','return','requested'].includes(type) ? 'pending' : ''}`;
+          li.innerHTML = content;
+          if (type !== 'pickup' && type !== 'return' && type !== 'requested') li.onclick = () => showBookDetails(book.id);
+          el.appendChild(li);
+        });
+      };
+
+      renderList(issuedBooks.filter(b => b.status === 'Pending Pickup'), pickupEl, 'pickup');
+      renderList(issuedBooks.filter(b => b.status === 'Pending Return'), returnEl, 'return');
+      renderList(requestedBooks, requestedEl, 'requested');
+      renderList(issuedBooks.filter(b => b.status === 'Picked Up'), pickedUpEl, 'pickedup');
+      renderList(allBooks, allBooksEl, 'all');
+
+      catDropdown.innerHTML = '<option value="" disabled selected>Select Category</option>';
+      bookCategories.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c; opt.innerText = c;
+        catDropdown.appendChild(opt);
+      });
+    }
+
+    /* --- Actions --- */
+    function issueBook(e, id) {
+      e.stopPropagation();
+      if (getAvailableStock(id) <= 0) return showToast('Out of stock', 'error');
+      issuedBooks.push({
+        issueId: Date.now(),
+        bookId: id,
+        studentId: currentUser.id,
+        status: 'Pending Pickup',
+        dueDate: null
+      });
+      saveDataToLocalStorage();
+      renderStudentDashboard();
+      showToast('Book issued', 'success');
+    }
+
+    function returnBook(e, issueId) {
+      e.stopPropagation();
+      const issue = issuedBooks.find(b => b.issueId === issueId);
+      if (issue) {
+        issue.status = 'Pending Return';
+        saveDataToLocalStorage();
+        renderStudentDashboard();
+        showToast('Return requested', 'info');
+      }
+    }
+
+    function requestBook(e, bookId) {
+      e.stopPropagation();
+      const exists = requestedBooks.some(r => r.studentId === currentUser.id && r.bookId === bookId);
+      if (exists) return;
+      requestedBooks.push({
+        bookId,
+        studentId: currentUser.id,
+        requestDate: new Date().toISOString().split('T')[0]
+      });
+      saveDataToLocalStorage();
+      renderStudentDashboard();
+      showToast('Request sent', 'success');
+    }
+
+    function cancelIssueRequest(e, issueId) {
+      e.stopPropagation();
+      issuedBooks = issuedBooks.filter(b => b.issueId !== issueId);
+      saveDataToLocalStorage();
+      renderStudentDashboard();
+      showToast('Request cancelled', 'info');
+    }
+
+    function removeRequest(e, bookId, studentId) {
+      e.stopPropagation();
+      if (studentId === currentUser.id) {
+        requestedBooks = requestedBooks.filter(r => !(r.bookId === bookId && r.studentId === studentId));
+        renderStudentDashboard();
+        showToast('Request cancelled', 'info');
+      } else {
+        if(confirm('Mark request done?')) {
+          requestedBooks = requestedBooks.filter(r => !(r.bookId === bookId && r.studentId === studentId));
+          saveDataToLocalStorage();
+          renderStaffDashboard();
+          showToast('Request removed', 'success');
+        }
+      }
+    }
+
+    function confirmPickup(e, issueId) {
+      e.stopPropagation();
+      const issue = issuedBooks.find(b => b.issueId === issueId);
+      if (issue) {
+        const due = new Date(); due.setDate(due.getDate() + 14);
+        issue.dueDate = due.toISOString().split('T')[0];
+        issue.status = 'Picked Up';
+        saveDataToLocalStorage();
+        renderStaffDashboard();
+        showToast('Pickup confirmed', 'success');
+      }
+    }
+
+    function confirmReturn(e, issueId) {
+      e.stopPropagation();
+      issuedBooks = issuedBooks.filter(b => b.issueId !== issueId);
+      saveDataToLocalStorage();
+      renderStaffDashboard();
+      showToast('Return confirmed', 'success');
+    }
+
+    function addBook(e) {
+      e.preventDefault();
+      const title = document.getElementById('new-book-title').value;
+      const author = document.getElementById('new-book-author').value;
+      const category = document.getElementById('new-book-category').value;
+      const stock = parseInt(document.getElementById('new-book-stock').value);
+
+      if(!title || !author || !category || isNaN(stock)) return showToast('Invalid input', 'error');
+
+      allBooks.push({ id: Date.now(), title, author, category, totalStock: stock });
+      saveDataToLocalStorage();
+      document.getElementById('add-book-form').reset();
+      renderStaffDashboard();
+      showToast('Book added', 'success');
+    }
+
+    function deleteBook(e, id) {
+      e.stopPropagation();
+      if(issuedBooks.some(i => i.bookId === id)) return showToast('Book is issued', 'error');
+      if(confirm('Delete this book?')) {
+        allBooks = allBooks.filter(b => b.id !== id);
+        saveDataToLocalStorage();
+        renderStaffDashboard();
+        showToast('Book deleted', 'info');
+      }
+    }
+
+    /* --- Restocking Modal Logic --- */
+    function openRestockModal(e, bookId, studentId) {
+      e.stopPropagation();
+      currentRestockBookId = bookId;
+      currentRestockStudentId = studentId;
+      
+      const book = allBooks.find(b => b.id === bookId);
+      
+      document.getElementById('modal-title').innerText = 'Restock Book';
+      document.getElementById('modal-body').innerHTML = `
+        <p>Restocking: <strong>${book.title}</strong></p>
+        <p>Current Total Stock: <strong>${book.totalStock}</strong></p>
+        <label>Quantity to Add:</label>
+        <input type="number" id="restock-amount" min="1" value="1" required>
+      `;
+      document.getElementById('modal-footer').innerHTML = `
+        <button class="btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn-success" onclick="confirmRestock()">Confirm Restock</button>
+      `;
+      document.getElementById('app-modal').style.display = 'block';
+    }
+
+    function confirmRestock() {
+      const amount = parseInt(document.getElementById('restock-amount').value);
+      if (!amount || amount <= 0) return showToast('Please enter a valid quantity', 'error');
+
+      const book = allBooks.find(b => b.id === currentRestockBookId);
+      if (book) {
+        book.totalStock += amount;
+        
+        // Remove the specific request that triggered this restock
+        requestedBooks = requestedBooks.filter(r => !(r.bookId === currentRestockBookId && r.studentId === currentRestockStudentId));
+        
+        saveDataToLocalStorage();
+        closeModal();
+        renderStaffDashboard();
+        showToast(`Added ${amount} copies successfully`, 'success');
+      }
+    }
+
+    /* --- Modal & Editing --- */
+    function showBookDetails(bookId) {
+      const book = allBooks.find(b => b.id === bookId);
+      if(!book) return;
+      const stock = getAvailableStock(bookId);
+      
+      document.getElementById('modal-title').innerText = book.title;
+      document.getElementById('modal-body').innerHTML = `
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div><strong>Author:</strong><br>${book.author}</div>
+          <div><strong>Category:</strong><br>${book.category}</div>
+          <div><strong>Total Stock:</strong><br>${book.totalStock}</div>
+          <div><strong>Available:</strong><br>${stock}</div>
+        </div>
+      `;
+      document.getElementById('modal-footer').innerHTML = `<button class="btn-primary" onclick="closeModal()">Close</button>`;
+      document.getElementById('app-modal').style.display = 'block';
+    }
+
+    function editBook(e, id) {
+      e.stopPropagation();
+      const book = allBooks.find(b => b.id === id);
+      if(!book) return;
+
+      document.getElementById('modal-title').innerText = 'Edit Book';
+      document.getElementById('modal-body').innerHTML = `
+        <label>Title</label><input type="text" id="edit-title" value="${book.title}">
+        <label>Author</label><input type="text" id="edit-author" value="${book.author}">
+        <label>Category</label>
+        <select id="edit-category">
+          ${bookCategories.map(c => `<option value="${c}" ${c===book.category?'selected':''}>${c}</option>`).join('')}
+        </select>
+        <label>Total Stock</label><input type="number" id="edit-stock" value="${book.totalStock}" min="0">
+      `;
+      document.getElementById('modal-footer').innerHTML = `
+        <button class="btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn-success" onclick="saveBookChanges(${id})">Save</button>
+      `;
+      document.getElementById('app-modal').style.display = 'block';
+    }
+
+    function saveBookChanges(id) {
+      const newTitle = document.getElementById('edit-title').value;
+      const newAuth = document.getElementById('edit-author').value;
+      const newCat = document.getElementById('edit-category').value;
+      const newStock = parseInt(document.getElementById('edit-stock').value);
+
+      if(!newTitle || !newAuth || !newCat || isNaN(newStock)) return showToast('Fields missing', 'error');
+      
+      const issuedCount = issuedBooks.filter(i => i.bookId === id).length;
+      if(newStock < issuedCount) return showToast(`Stock min: ${issuedCount}`, 'error');
+
+      const book = allBooks.find(b => b.id === id);
+      book.title = newTitle; book.author = newAuth; book.category = newCat; book.totalStock = newStock;
+      saveDataToLocalStorage();
+      closeModal();
+      renderStaffDashboard();
+      showToast('Book updated', 'success');
+    }
+
+    function closeModal() {
+      document.getElementById('app-modal').style.display = 'none';
+      // Reset restock tracking
+      currentRestockBookId = null;
+      currentRestockStudentId = null;
+    }
+
+    window.onclick = function(e) {
+      if (e.target == document.getElementById('app-modal')) closeModal();
+    }
+
+    /* --- Search --- */
+    function searchStudentDashboard(e) {
+      currentStudentSearchQuery = e.target.value.toLowerCase();
+      renderStudentDashboard();
+    }
+    function searchStaffDashboard(e) {
+      currentStaffSearchQuery = e.target.value.toLowerCase();
+      renderStaffDashboard();
+    }
+
+    /* --- Toast System --- */
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast`;
+      
+      let icon = 'ri-information-line';
+      if(type === 'success') { icon = 'ri-checkbox-circle-line'; toast.style.borderLeftColor = 'var(--secondary)'; }
+      if(type === 'error') { icon = 'ri-error-warning-line'; toast.style.borderLeftColor = 'var(--danger)'; }
+      if(type === 'warning') { icon = 'ri-alert-line'; toast.style.borderLeftColor = 'var(--warning)'; }
+
+      toast.innerHTML = `<i class="${icon}" style="font-size: 1.2rem; color: var(--dark);"></i> <span>${msg}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
+```
