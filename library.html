@@ -1,22 +1,19 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BMSIT&M Library - Modern</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BMSIT&M Library </title>
   <!-- RemixIcon for beautiful UI icons -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   <!-- Google Fonts: Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
-    /* --- CSS Variables & Reset --- */
+    /* --- CSS Variables & Reset (light + dark override) --- */
     :root {
-      --primary: #6366f1; /* Indigo */
+      --primary: #6366f1;
       --primary-dark: #4f46e5;
-      --secondary: #10b981; /* Emerald */
+      --secondary: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
       --dark: #1e293b;
@@ -24,435 +21,198 @@
       --white: #ffffff;
       --gray: #94a3b8;
       --border: #e2e8f0;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-hover: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --excel-green: #16a34a;
+      --json-blue: #0ea5e9;
+      --xls-gold: #f59e0b;
+
+      /* app backgrounds */
+      --bg: var(--light);
+      --text: var(--dark);
+      --panel-bg: #ffffff;
+      --muted: var(--gray);
+    }
+
+    body[data-theme="dark"] {
+      --bg: #0b1220;
+      --text: #e6eef8;
+      --panel-bg: #0f1724;
+      --muted: #9aa6b2;
+      --border: #1f2937;
+      --shadow: 0 6px 18px rgba(0,0,0,0.6);
+      --shadow-hover: 0 10px 30px rgba(2,6,23,0.7);
     }
 
     * { box-sizing: border-box; outline: none; }
 
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: var(--light);
+      background-color: var(--bg);
       background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20241007/pngtree-whimsical-library-interior-a-magical-retreat-surrounded-by-books-and-grand-image_16306778.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      color: var(--dark);
+      color: var(--text);
       margin: 0;
       min-height: 100vh;
-      padding-top: 80px; /* Space for fixed header */
+      padding-top: 80px;
     }
 
-    /* --- Glassmorphism Overlay --- */
     .glass-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255,255,255,0.1);
       backdrop-filter: blur(8px);
       z-index: -1;
     }
+    body[data-theme="dark"] .glass-overlay {
+      background: rgba(2,6,23,0.6);
+      backdrop-filter: blur(6px) saturate(140%);
+    }
 
-    /* --- Header & Navigation --- */
     header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255,255,255,0.95);
       backdrop-filter: blur(10px);
       padding: 0.8rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 1002; /* Higher than overlay to be clickable */
+      z-index: 1002;
       box-shadow: var(--shadow);
       border-bottom: 1px solid rgba(255,255,255,0.3);
     }
+    body[data-theme="dark"] header {
+      background: rgba(10,15,25,0.85);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
 
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: var(--primary);
-      text-decoration: none;
+      display:flex; gap:0.5rem; align-items:center; font-weight:700; font-size:1.4rem; color:var(--primary);
+      text-decoration:none;
     }
-    .logo i { font-size: 1.8rem; }
+    .desktop-nav { display:flex; gap:1rem; align-items:center; }
+    .nav-link { text-decoration:none; color:var(--text); font-weight:500; font-size:0.95rem; position:relative; }
+    .nav-link:hover { color:var(--primary); }
+    .btn-nav { background:var(--primary); color:white !important; padding:0.5rem 1.2rem; border-radius:8px; }
+    .btn-nav:hover { background:var(--primary-dark); transform:translateY(-2px); }
 
-    /* Desktop Nav */
-    .desktop-nav {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
+    .header-actions { display:flex; align-items:center; gap:0.75rem; position:relative; }
+    .notification-bell { position:relative; font-size:1.4rem; cursor:pointer; color:var(--text); }
+    .notif-badge { position:absolute; top:-6px; right:-6px; background:var(--danger); color:white; font-size:0.65rem; padding:2px 6px; border-radius:999px; font-weight:700; }
+    .notif-dropdown { position:absolute; right:0; top:40px; width:320px; background:var(--panel-bg); border-radius:10px; box-shadow:var(--shadow); z-index:1200; display:none; overflow:hidden; border:1px solid var(--border); }
+    .notif-dropdown.active { display:block; }
+    .notif-list { max-height:260px; overflow-y:auto; }
+    .notif-item { padding:0.75rem 1rem; border-bottom:1px solid var(--border); display:flex; gap:0.75rem; align-items:center; }
+    .profile-btn { display:flex; align-items:center; gap:0.5rem; cursor:pointer; border-radius:10px; padding:0.25rem 0.4rem; }
+    .profile-menu { position:absolute; right:0; top:40px; width:220px; background:var(--panel-bg); border-radius:10px; box-shadow:var(--shadow); z-index:1200; display:none; overflow:hidden; border:1px solid var(--border); }
 
-    .nav-link {
-      text-decoration: none;
-      color: var(--dark);
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: color 0.3s;
-      position: relative;
-    }
-    .nav-link:hover { color: var(--primary); }
-    
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      width: 0; height: 2px;
-      bottom: -4px; left: 0;
-      background: var(--primary);
-      transition: width 0.3s;
-    }
-    .nav-link:hover::after { width: 100%; }
+    .hamburger { display:none; font-size:1.8rem; cursor:pointer; }
+    .mobile-menu { position:fixed; top:0; right:-100%; width:280px; height:100vh; background:var(--panel-bg); box-shadow:-5px 0 15px rgba(0,0,0,0.1); z-index:1001; transition:right 0.35s; display:flex; flex-direction:column; padding:5rem 1.5rem 2rem; border-left:1px solid var(--border); }
+    .mobile-menu.active { right:0; }
 
-    .btn-nav {
-      background: var(--primary);
-      color: white !important;
-      padding: 0.5rem 1.2rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      transition: transform 0.2s, background 0.2s;
-    }
-    .btn-nav:hover { 
-      transform: translateY(-2px); 
-      background: var(--primary-dark);
-    }
-    .btn-nav::after { display: none; }
+    main { max-width:1000px; margin:0 auto; padding:2rem 1rem; }
+    .section { display:none; animation:fadeIn 0.4s ease-out; }
+    .section.active { display:block; }
 
-    /* Hamburger Menu */
-    .hamburger {
-      display: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--dark);
-    }
+    h2 { color:var(--text); margin-bottom:1.5rem; font-size:1.8rem; border-left:5px solid var(--primary); padding-left:1rem; }
 
-    /* Mobile Nav Drawer */
-    .mobile-menu {
-      position: fixed;
-      top: 0; right: -100%; /* Hidden off-screen */
-      width: 280px;
-      height: 100vh;
-      background: white;
-      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-      z-index: 1001; /* Above overlay, below header */
-      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      padding: 5rem 1.5rem 2rem;
-    }
-    .mobile-menu.active { right: 0; }
-    
-    .mobile-menu .nav-link {
-      font-size: 1.1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .mobile-menu .btn-nav {
-      margin-top: 1rem;
-      text-align: center;
-      display: block;
-    }
-    
-    .close-menu {
-      position: absolute;
-      top: 1.5rem; right: 1.5rem;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--gray);
-    }
+    .search-bar { width:100%; padding:1rem 1rem 1rem 3rem; font-size:1rem; border:1px solid var(--border); border-radius:12px; background:var(--panel-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18' fill='%2394a3b8'%3E%3Cpath d='M10 18a8 8 0 100-16 8 8 0 000 16zm8-3l4-4'/%3E%3C/svg%3E") no-repeat 15px center; margin-bottom:1.5rem; transition:box-shadow 0.3s; color:var(--text); }
+    .search-bar:focus { box-shadow:0 0 0 3px rgba(99,102,241,0.12); border-color:var(--primary); outline:none; }
 
-    /* Overlay for mobile menu */
-    .menu-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000; /* Background layer */
-      display: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .menu-overlay.active { display: block; opacity: 1; }
+    input, select { width:100%; padding:0.8rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; transition:border 0.3s; background:var(--panel-bg); color:var(--text); }
+    input:focus, select:focus { border-color:var(--primary); }
 
-    /* --- Main Layout --- */
-    main {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
+    button { cursor:pointer; border:none; border-radius:8px; padding:0.6rem 1.2rem; font-weight:600; font-family:inherit; transition:all 0.2s; display:inline-flex; align-items:center; gap:0.5rem; }
+    .btn-primary { background:var(--primary); color:white; }
+    .btn-success { background:var(--secondary); color:white; }
+    .btn-danger { background:var(--danger); color:white; }
+    .btn-warning { background:var(--warning); color:white; }
+    .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+
+    .book-item { background:var(--panel-bg); border:1px solid var(--border); border-radius:12px; padding:1.25rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; gap:1.5rem; transition:transform 0.2s, box-shadow 0.2s; position:relative; overflow:hidden; color:var(--text); }
+    .book-item:hover { transform:translateY(-3px); box-shadow:var(--shadow-hover); border-color:var(--primary); }
+    .book-item.overdue { border-left:5px solid var(--danger); }
+    .book-item.pending { border-left:5px solid var(--warning); }
+
+    .book-icon { width:45px; height:45px; background:#eff6ff; color:var(--primary); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+    .book-info { flex-grow:1; }
+    .book-info strong { display:block; font-size:1.1rem; color:var(--text); margin-bottom:0.2rem; }
+    .book_info span { font-size:0.9rem; color:var(--muted); display:block; }
+
+    .stock-badge { display:inline-block; font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:20px; font-weight:600; margin-top:0.3rem; }
+    .stock-badge.ok { background:#dcfce7; color:#166534; }
+    .stock-badge.low { background:#fee2e2; color:#991b1b; }
+
+    .book-action { display:flex; gap:0.5rem; flex-shrink:0; }
+
+    .category-tabs { display:flex; gap:0.8rem; margin-bottom:1.5rem; overflow-x:auto; padding-bottom:0.5rem; scrollbar-width:none; }
+    .tab-button { padding:0.5rem 1.2rem; border-radius:20px; background:var(--panel-bg); border:1px solid var(--border); color:var(--muted); white-space:nowrap; transition:all 0.3s; }
+    .tab-button.active { background:var(--primary); color:white; border-color:var(--primary); box-shadow:0 4px 10px rgba(99,102,241,0.3); }
+
+    .login-wrapper { display:flex; flex-direction:column; align-items:center; gap:2rem; margin-top:2rem; }
+    .role-card { background:var(--panel-bg); padding:2rem; border-radius:16px;margin-right: 2rem ; box-shadow:var(--shadow); text-align:center; width:200px; cursor:pointer; transition:transform 0.3s; border:2px solid transparent; }
+    .role-card:hover { transform:translateY(-5px); border-color:var(--primary); }
+    .role-card i { font-size:3rem; color:var(--primary); margin-bottom:1rem; display:block; }
+
+    .manage-books { background:var(--panel-bg); padding:2rem; border-radius:16px; box-shadow:var(--shadow); margin-top:2rem; border:1px solid var(--border); }
+    .add-book-form { display:grid; grid-template-columns:2fr 2fr 1fr 80px auto; gap:1rem; margin-bottom:2rem; align-items:end; }
+
+    .action-group { display:flex; gap:0.6rem; flex-wrap:wrap; }
+    .btn-json { background:linear-gradient(90deg, var(--json-blue), var(--primary)); color:white; border-radius:10px; padding:0.5rem 0.9rem; box-shadow:0 6px 18px rgba(14,165,233,0.12); border:1px solid rgba(255,255,255,0.06); font-weight:600; }
+    .btn-history-xls { background:linear-gradient(90deg, var(--xls-gold), #ffb84d); color:#2b2b2b; border-radius:10px; padding:0.5rem 0.9rem; box-shadow:0 6px 18px rgba(245,158,11,0.09); font-weight:600; }
+    .btn-import-json { background:transparent; color:var(--primary-dark); border-radius:10px; padding:0.5rem 0.9rem; border:1px solid var(--primary); font-weight:600; }
+    .btn-import-xls { background:linear-gradient(90deg, #059669, var(--excel-green)); color:white; border-radius:10px; padding:0.5rem 0.9rem; box-shadow:0 6px 18px rgba(5,150,105,0.09); font-weight:600; }
+
+    .pager { display:flex; gap:0.5rem; align-items:center; justify-content:flex-end; margin-bottom:0.75rem; }
+    .pager .page-num { padding:0.35rem 0.6rem; border-radius:6px; background:var(--panel-bg); border:1px solid var(--border); cursor:pointer; }
+    .pager .page-num.active { background:var(--primary); color:white; border-color:var(--primary); }
+
+    #toast-container { position:fixed; top:90px; right:20px; z-index:2000; display:flex; flex-direction:column; gap:10px; }
+    .toast { background:var(--panel-bg); padding:1rem 1.5rem; border-radius:10px; box-shadow:var(--shadow-hover); display:flex; align-items:center; gap:0.8rem; animation:slideIn 0.3s cubic-bezier(0.68,-0.55,0.27,1.55); border-left:5px solid var(--primary); min-width:300px; color:var(--text); border:1px solid var(--border); }
+    @keyframes slideIn { from { transform:translateX(100%); opacity:0 } to { transform:translateX(0); opacity:1 } }
+
+    .modal { display:none; position:fixed; z-index:3000; left:0; top:0; width:100%; height:100%; background:rgba(30,41,59,0.6); backdrop-filter:blur(4px); }
+    .modal-content { background:var(--panel-bg); width:90%; max-width:500px; margin:8% auto; border-radius:20px; padding:0; overflow:hidden; animation:modalPop 0.3s ease-out; box-shadow:0 20px 25px -5px rgba(0,0,0,0.1); border:1px solid var(--border); }
+    @keyframes modalPop { from { transform:scale(0.9); opacity:0 } to { transform:scale(1); opacity:1 } }
+    .modal-header { padding:1.5rem; background:var(--panel-bg); display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); }
+    .modal-body { padding:2rem; color:var(--text); }
+    .modal-footer { padding:1rem 2rem; background:var(--panel-bg); text-align:right; display:flex; justify-content:flex-end; gap:1rem; border-top:1px solid var(--border); }
+
+    footer { text-align:center; padding:2rem; color:var(--muted); font-size:0.9rem; margin-top:3rem; }
+
+    @media (max-width:850px){
+      .desktop-nav { display:none; }
+      .hamburger { display:block; }
+      .add-book-form { grid-template-columns:1fr; }
+      .book-item { flex-direction:column; align-items:flex-start; }
+      .book-action { width:100%; margin-top:1rem; justify-content:flex-end; }
+      .book-icon { display:none; }
+      .header-actions { display:none; }
     }
 
-    .section { display: none; animation: fadeIn 0.4s ease-out; }
-    .section.active { display: block; }
+    /* Progress bar */
+    .quota {
+      width:220px; display:flex; align-items:center; gap:0.6rem; font-size:0.9rem;
+    }
+    .quota-bar {
+      background:var(--panel-bg); border:1px solid var(--border); border-radius:999px; overflow:hidden; width:140px; height:10px;
+    }
+    .quota-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--secondary)); width:0%; transition:width 0.3s; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    /* small helper */
+    .small-muted { color:var(--muted); font-size:0.9rem; }
 
-    h2 {
-      color: var(--dark);
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-      border-left: 5px solid var(--primary);
-      padding-left: 1rem;
-    }
+    /* mini search container (to pair input + clear button) */
+    .mini-search-row { display:flex; gap:0.5rem; align-items:center; margin:0.5rem 0 1rem 0; }
+    .mini-search { flex:1; padding:0.85rem 1rem; font-size:0.95rem; border-radius:8px; border:1px solid var(--border); background:var(--panel-bg); color:var(--text); }
+    .mini-clear { padding:0.6rem 0.8rem; border-radius:8px; border:1px solid var(--border); background:transparent; cursor:pointer; }
 
-    /* --- Forms & Inputs --- */
-    .search-bar {
-      width: 100%;
-      padding: 1rem 1rem 1rem 3rem;
-      font-size: 1rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18' fill='%2394a3b8'%3E%3Cpath d='M10 18a8 8 0 100-16 8 8 0 000 16zm8-3l4-4'/%3E%3C/svg%3E") no-repeat 15px center;
-      margin-bottom: 1.5rem;
-      transition: box-shadow 0.3s;
-    }
-    .search-bar:focus {
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-      border-color: var(--primary);
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-family: inherit;
-      transition: border 0.3s;
-    }
-    input:focus, select:focus { border-color: var(--primary); }
-
-    button {
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      padding: 0.6rem 1.2rem;
-      font-weight: 600;
-      font-family: inherit;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    button:active { transform: scale(0.98); }
-
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-success { background: var(--secondary); color: white; }
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-warning { background: var(--warning); color: white; }
-    .btn-outline { background: white; border: 1px solid var(--border); color: var(--dark); }
-    .btn-outline:hover { background: var(--light); }
-
-    /* --- Cards & Lists --- */
-    .book-item {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1.5rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-    .book-item:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-hover);
-      border-color: var(--primary);
-    }
-    
-    .book-item.overdue { border-left: 5px solid var(--danger); }
-    .book-item.pending { border-left: 5px solid var(--warning); }
-    
-    .book-icon {
-      width: 45px; height: 45px;
-      background: #eff6ff;
-      color: var(--primary);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
-    .book-info { flex-grow: 1; }
-    .book-info strong { display: block; font-size: 1.1rem; color: var(--dark); margin-bottom: 0.2rem; }
-    .book-info span { font-size: 0.9rem; color: var(--gray); display: block; }
-    
-    .stock-badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      font-weight: 600;
-      margin-top: 0.3rem;
-    }
-    .stock-badge.ok { background: #dcfce7; color: #166534; }
-    .stock-badge.low { background: #fee2e2; color: #991b1b; }
-
-    .book-action { display: flex; gap: 0.5rem; flex-shrink: 0; }
-
-    /* --- Tabs --- */
-    .category-tabs {
-      display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-      scrollbar-width: none;
-    }
-    .category-tabs::-webkit-scrollbar { display: none; }
-
-    .tab-button {
-      padding: 0.5rem 1.2rem;
-      border-radius: 20px;
-      background: white;
-      border: 1px solid var(--border);
-      color: var(--gray);
-      white-space: nowrap;
-      transition: all 0.3s;
-    }
-    .tab-button.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
-    }
-
-    /* --- Login Page --- */
-    .login-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-    .role-buttons {
-      display: flex;
-      gap: 2rem;
-    }
-    .role-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      width: 200px;
-      cursor: pointer;
-      transition: transform 0.3s;
-      border: 2px solid transparent;
-    }
-    .role-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-    .role-card i { font-size: 3rem; color: var(--primary); margin-bottom: 1rem; display: block; }
-
-    .login-form-box {
-      background: white;
-      padding: 2.5rem;
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      width: 100%;
-      max-width: 400px;
-    }
-    .login-form-box h3 { text-align: center; margin-top: 0; color: var(--primary); }
-
-    /* --- Manage Section --- */
-    .manage-books {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      margin-top: 2rem;
-    }
-    .add-book-form {
-      display: grid;
-      grid-template-columns: 2fr 2fr 1fr 80px auto;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      align-items: end;
-    }
-
-    /* --- Toast & Modal --- */
-    #toast-container {
-      position: fixed;
-      top: 90px; right: 20px;
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .toast {
-      background: white;
-      padding: 1rem 1.5rem;
-      border-radius: 10px;
-      box-shadow: var(--shadow-hover);
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      animation: slideIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-      border-left: 5px solid var(--primary);
-      min-width: 300px;
-    }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 3000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(30, 41, 59, 0.6);
-      backdrop-filter: blur(4px);
-    }
-    .modal-content {
-      background: white;
-      width: 90%; max-width: 500px;
-      margin: 8% auto;
-      border-radius: 20px;
-      padding: 0;
-      overflow: hidden;
-      animation: modalPop 0.3s ease-out;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    
-    .modal-header {
-      padding: 1.5rem;
-      background: var(--light);
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid var(--border);
-    }
-    .modal-header h3 { margin: 0; color: var(--dark); }
-    .modal-body { padding: 2rem; }
-    .modal-footer {
-      padding: 1rem 2rem;
-      background: var(--light);
-      text-align: right;
-      display: flex; justify-content: flex-end; gap: 1rem;
-    }
-
-    /* --- Footer --- */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: var(--gray);
-      font-size: 0.9rem;
-      margin-top: 3rem;
-    }
-
-    /* --- Mobile Responsive Queries --- */
-    @media (max-width: 850px) {
-      .desktop-nav { display: none; }
-      .hamburger { display: block; }
-      .add-book-form { grid-template-columns: 1fr; }
-      .book-item { flex-direction: column; align-items: flex-start; }
-      .book-action { width: 100%; margin-top: 1rem; justify-content: flex-end; }
-      .book-icon { display: none; }
-    }
+    /* filter selects next to search */
+    .filter-select { width:190px; padding:0.8rem; border-radius:8px; border:1px solid var(--border); background:var(--panel-bg); color:var(--text); }
+    .small-inline { width:120px; }
   </style>
 </head>
 <body>
@@ -462,7 +222,7 @@
   <!-- Header -->
   <header>
     <a href="#" onclick="showSection('home')" class="logo">
-      <i class="ri-book-open-line"></i> BMSIT&M
+      <i class="ri-book-open-line"></i> BMSIT&amp;M
     </a>
 
     <!-- Desktop Nav -->
@@ -473,6 +233,40 @@
       <a href="#" id="nav-dashboard-link" class="nav-link" onclick="showDashboard()" style="display:none;">Dashboard</a>
       <button class="btn-nav" id="nav-login-btn" onclick="showSection('login')">Login</button>
       <button class="btn-nav btn-danger" id="nav-logout-btn" onclick="logout()" style="display:none;">Logout</button>
+
+      <div class="header-actions" aria-hidden="false">
+        <div class="notification-bell" id="notif-bell" title="Notifications" onclick="toggleNotifDropdown(event)">
+          <i class="ri-notification-line"></i>
+          <span class="notif-badge" id="notif-count" style="display:none">0</span>
+        </div>
+
+        <div class="notif-dropdown" id="notif-dropdown" aria-hidden="true">
+          <div style="padding:0.8rem 1rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+            <strong>Notifications</strong>
+            <button class="btn-outline" id="notif-clear-btn" style="padding:0.35rem 0.6rem; font-size:0.85rem;" onclick="clearNotifications()">Clear</button>
+          </div>
+          <div class="notif-list" id="notif-list"></div>
+        </div>
+
+        <!-- Theme toggle -->
+        <button id="theme-toggle" class="btn-outline" title="Toggle theme" onclick="toggleTheme()">
+          <i id="theme-icon" class="ri-sun-line"></i>
+        </button>
+
+        <div class="profile-btn" id="profile-btn" onclick="toggleProfileMenu(event)" title="Profile">
+          <i class="ri-user-3-line" style="color:var(--primary); font-size:1.1rem;"></i>
+          <span id="profile-name" style="font-weight:600; color:var(--text)"></span>
+        </div>
+
+        <div class="profile-menu" id="profile-menu">
+          <div style="padding:0.75rem 1rem; border-bottom:1px solid var(--border);">
+            <strong id="profile-role">Guest</strong><br>
+            <small id="profile-email" style="color:var(--muted)">Not logged in</small>
+          </div>
+          <a href="#" onclick="showSection('login')">Switch User</a>
+          <button onclick="logout()">Logout</button>
+        </div>
+      </div>
     </nav>
 
     <!-- Hamburger Icon -->
@@ -497,19 +291,19 @@
   <main>
     <!-- Home -->
     <section id="home" class="section active">
-      <div class="hero" style="text-align: center;">
-        <img src="https://t3.ftcdn.net/jpg/08/90/46/32/360_F_890463230_u57G26OxcxvAGYxyYCpllrohnmSlBLN6.jpg" alt="Library" class="hero-image" style="max-width: 100%; height: auto; border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 2rem;">
-        <h2 style="border:none; font-size: 2.5rem; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; color: transparent;">The Importance of Books</h2>
-        <p style="font-size: 1.1rem; color: var(--gray); line-height: 1.6;">Books are foundation of knowledge, imagination, and progress. They open doors to new worlds, preserve wisdom of generations, and empower us to think critically and creatively.</p>
+      <div class="hero" style="text-align:center;">
+        <img src="https://t3.ftcdn.net/jpg/08/90/46/32/360_F_890463230_u57G26OxcxvAGYxyYCpllrohnmSlBLN6.jpg" alt="Library" style="max-width:100%; height:auto; border-radius:16px; box-shadow:var(--shadow); margin-bottom:2rem;">
+        <h2 style="border:none; font-size:2.5rem; background:linear-gradient(to right,var(--primary),var(--secondary)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">The Importance of Books</h2>
+        <p style="font-size:1.1rem; color:var(--muted); line-height:1.6;">Books are foundation of knowledge, imagination, and progress. They open doors to new worlds, preserve wisdom of generations, and empower us to think critically and creatively.</p>
       </div>
     </section>
 
     <!-- About -->
     <section id="about" class="section">
       <h2>About Our Library</h2>
-      <div class="book-item" style="cursor: default;">
+      <div class="book-item" style="cursor:default;">
         <div class="book-info">
-          <p style="font-size: 1.05rem; line-height: 1.8;">The BMSIT&M Library is a hub of knowledge, supporting the academic and research needs of students and faculty. With a vast collection of books, journals, and digital resources, our library fosters a culture of learning and innovation.</p>
+          <p style="font-size:1.05rem; line-height:1.8;">The BMSIT&amp;M Library is a hub of knowledge, supporting the academic and research needs of students and faculty. With a vast collection of books, journals, and digital resources, our library fosters a culture of learning and innovation.</p>
         </div>
       </div>
     </section>
@@ -522,15 +316,15 @@
         <div class="book-info">
           <strong>Chief Librarian</strong>
           <span>Dr. S. Ramesh</span>
-          <a href="mailto:ramesh@bmsit.ac.in" style="color: var(--primary); text-decoration: none;">ramesh@bmsit.ac.in</a>
+          <a href="mailto:ramesh@bmsit.ac.in" style="color:var(--primary); text-decoration:none;">ramesh@bmsit.ac.in</a>
         </div>
       </div>
       <div class="book-item" style="cursor: default;">
-        <i class="ri-user-star-line book-icon" style="background: #fff7ed; color: var(--warning);"></i>
+        <i class="ri-user-star-line book-icon" style="background:#fff7ed; color:var(--warning);"></i>
         <div class="book-info">
           <strong>Assistant Librarian</strong>
           <span>Ms. Priya Nair</span>
-          <a href="mailto:priya.nair@bmsit.ac.in" style="color: var(--primary); text-decoration: none;">priya.nair@bmsit.ac.in</a>
+          <a href="mailto:priya.nair@bmsit.ac.in" style="color:var(--primary); text-decoration:none;">priya.nair@bmsit.ac.in</a>
         </div>
       </div>
     </section>
@@ -540,7 +334,7 @@
       <div class="login-wrapper">
         <div class="role-buttons" id="role-selection">
           <div class="role-card" onclick="showLoginForms('student')">
-            <i class="ri-student-line"></i>
+            <i class="ri-user-line"></i>
             <h3>Student</h3>
           </div>
           <div class="role-card" onclick="showLoginForms('staff')">
@@ -550,81 +344,162 @@
         </div>
 
         <form id="student-login" class="login-form-box" style="display:none" onsubmit="return login('student')">
-          <i class="ri-user-3-line" style="font-size: 3rem; color: var(--primary); display:block; text-align:center; margin-bottom:1rem;"></i>
+          <i class="ri-user-3-line" style="font-size:3rem; color:var(--primary); display:block; text-align:center; margin-bottom:1rem;"></i>
           <h3>Student Login</h3>
-          <input type="text" id="student-username" placeholder="Student ID" required style="margin-bottom: 1rem;">
-          <input type="password" id="student-password" placeholder="Password" required style="margin-bottom: 1rem;">
-          <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
-          <p class="toast" style="margin-top: 1rem; width: 100%; min-width: auto; display: none;" id="student-message"></p>
+          <input type="text" id="student-username" placeholder="Student ID" required style="margin-bottom:1rem;">
+          <input type="password" id="student-password" placeholder="Password" required style="margin-bottom:1rem;">
+          <!-- Added icon to student login button -->
+          <button type="submit" class="btn-primary" style="width:100%;">
+            <i class="ri-login-box-line" aria-hidden="true"></i>
+            Login
+          </button>
+          <p class="small-muted" id="student-message" style="display:none; margin-top:0.75rem;"></p>
         </form>
 
         <form id="staff-login" class="login-form-box" style="display:none" onsubmit="return login('staff')">
-          <i class="ri-admin-line" style="font-size: 3rem; color: var(--primary); display:block; text-align:center; margin-bottom:1rem;"></i>
+          <i class="ri-admin-line" style="font-size:3rem; color:var(--primary); display:block; text-align:center; margin-bottom:1rem;"></i>
           <h3>Staff Login</h3>
-          <input type="text" id="staff-username" placeholder="Staff ID" required style="margin-bottom: 1rem;">
-          <input type="password" id="staff-password" placeholder="Password" required style="margin-bottom: 1rem;">
-          <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
-          <p class="toast" style="margin-top: 1rem; width: 100%; min-width: auto; display: none;" id="staff-message"></p>
+          <input type="text" id="staff-username" placeholder="Staff ID" required style="margin-bottom:1rem;">
+          <input type="password" id="staff-password" placeholder="Password" required style="margin-bottom:1rem;">
+          <button type="submit" class="btn-primary" style="width:100%;">Login</button>
+          <p class="small-muted" id="staff-message" style="display:none; margin-top:0.75rem;"></p>
         </form>
       </div>
     </section>
 
     <!-- Student Dashboard -->
     <section id="student-dashboard" class="section">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
         <h2 style="margin:0;">My Dashboard</h2>
-      </div>
-      
-      <input type="search" id="student-search-bar" class="search-bar" placeholder="Search books..." oninput="searchStudentDashboard(event)">
-      
-      <div class="dashboard-grid">
-        <div>
-          <h3 style="font-size: 1.2rem; color: var(--gray); margin-bottom: 1rem;">My Issued Books</h3>
-          <ul id="student-issued-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+        <div style="text-align:right;">
+          <div id="student-quota" class="quota" aria-hidden="false">
+            <div style="font-weight:600;" id="quota-text">0 / 4</div>
+            <div class="quota-bar" aria-hidden="true"><div id="quota-fill" class="quota-fill"></div></div>
+          </div>
+          <div id="student-fine-summary" class="small-muted" style="margin-top:0.25rem;"></div>
         </div>
-        
+      </div>
+
+      <!-- Student search + category + sort -->
+      <div class="mini-search-row" style="margin-bottom:1rem;">
+        <input type="search" id="student-search-bar" class="mini-search" placeholder="Search books (title only)..." oninput="searchStudentDashboard(event)">
+        <select id="student-category-select" class="filter-select" onchange="onStudentCategoryChange(event)">
+          <option value="All">All Categories</option>
+        </select>
+        <select id="student-sort-select" class="filter-select small-inline" onchange="onStudentSortChange(event)">
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+          <option value="most">Most Stocked</option>
+          <option value="least">Least Stocked</option>
+        </select>
+      </div>
+
+      <div class="dashboard-grid" style="display:grid; grid-template-columns:1fr; gap:1.5rem;">
         <div>
-          <h3 style="font-size: 1.2rem; color: var(--gray); margin-bottom: 1rem;">Available to Issue</h3>
+          <h3 style="font-size:1.2rem; color:var(--muted); margin-bottom:1rem;">My Issued Books</h3>
+          <div id="student-issued-pager" class="pager"></div>
+          <ul id="student-issued-list" class="book-list" style="padding:0; list-style:none;"></ul>
+        </div>
+
+        <div>
+          <h3 style="font-size:1.2rem; color:var(--muted); margin-bottom:1rem;">Available to Issue</h3>
           <div id="category-tabs" class="category-tabs"></div>
-          <ul id="student-available-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+          <div id="student-available-pager" class="pager"></div>
+          <ul id="student-available-list" class="book-list" style="padding:0; list-style:none;"></ul>
+        </div>
+
+        <div>
+          <h3 style="font-size:1.2rem; color:var(--muted); margin-bottom:1rem;">Borrow History</h3>
+          <div id="student-history-pager" class="pager"></div>
+          <ul id="student-history-list" class="book-list" style="padding:0; list-style:none;"></ul>
         </div>
       </div>
     </section>
 
     <!-- Staff Dashboard -->
     <section id="staff-dashboard" class="section">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
         <h2 style="margin:0;">Staff Portal</h2>
       </div>
 
-      <input type="search" id="staff-search-bar" class="search-bar" placeholder="Search by ID or Title..." oninput="searchStaffDashboard(event)">
-      
-      <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-          <div class="manage-books" style="margin-top: 0; padding: 1.5rem;">
-            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="ri-time-line" style="color: var(--warning);"></i> Pending Pickups</h3>
-            <ul id="staff-pickup-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+      <div class="dashboard-grid" style="display:grid; grid-template-columns:1fr; gap:2rem;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem;">
+          <div class="manage-books" style="margin-top:0; padding:1.5rem;">
+            <h3 style="margin-top:0; display:flex; gap:0.5rem; align-items:center;"><i class="ri-time-line" style="color:var(--warning);"></i> Pending Pickups</h3>
+            <div class="mini-search-row">
+              <input type="search" id="staff-pickup-search" class="mini-search" placeholder="Search pending pickups by student or title..." oninput="searchStaffPickup(event)">
+              <select id="staff-pickup-filter" class="filter-select small-inline" onchange="onStaffPickupFilterChange(event)">
+                <option value="all">All</option>
+                <option value="expired">Expired</option>
+                <option value="expiring-soon">Expiring Soon</option>
+              </select>
+              <button class="mini-clear" title="Clear" onclick="clearStaffPickupSearch()"><i class="ri-close-line"></i></button>
+            </div>
+            <div id="staff-pickup-pager" class="pager"></div>
+            <ul id="staff-pickup-list" class="book-list" style="padding:0; list-style:none;"></ul>
           </div>
 
-          <div class="manage-books" style="margin-top: 0; padding: 1.5rem;">
-            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="ri-exchange-line" style="color: var(--secondary);"></i> Pending Returns</h3>
-            <ul id="staff-return-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+          <div class="manage-books" style="margin-top:0; padding:1.5rem;">
+            <h3 style="margin-top:0; display:flex; gap:0.5rem; align-items:center;"><i class="ri-exchange-line" style="color:var(--secondary);"></i> Pending Returns</h3>
+            <div class="mini-search-row">
+              <input type="search" id="staff-return-search" class="mini-search" placeholder="Search pending returns by student or title..." oninput="searchStaffReturn(event)">
+              <select id="staff-return-filter" class="filter-select small-inline" onchange="onStaffReturnFilterChange(event)">
+                <option value="all">All</option>
+                <option value="overdue">Overdue</option>
+                <option value="due-soon">Due Soon</option>
+              </select>
+              <button class="mini-clear" title="Clear" onclick="clearStaffReturnSearch()"><i class="ri-close-line"></i></button>
+            </div>
+            <div id="staff-return-pager" class="pager"></div>
+            <ul id="staff-return-list" class="book-list" style="padding:0; list-style:none;"></ul>
           </div>
         </div>
 
-        <div class="manage-books" style="padding: 1.5rem;">
-          <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="ri-file-list-3-line" style="color: var(--primary);"></i> Reorder Requests</h3>
-          <ul id="staff-requested-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+        <div class="manage-books" style="padding:1.5rem;">
+          <h3 style="margin-top:0; display:flex; gap:0.5rem; align-items:center;"><i class="ri-file-list-3-line" style="color:var(--primary);"></i> Reorder Requests (Waitlist)</h3>
+          <div class="mini-search-row">
+            <input type="search" id="staff-requested-search" class="mini-search" placeholder="Search waitlist by student or title..." oninput="searchStaffRequested(event)">
+            <select id="staff-requested-filter" class="filter-select small-inline" onchange="onStaffRequestedFilterChange(event)">
+              <option value="all">All</option>
+              <option value="recent">Recent (7d)</option>
+            </select>
+            <button class="mini-clear" title="Clear" onclick="clearStaffRequestedSearch()"><i class="ri-close-line"></i></button>
+          </div>
+          <div id="staff-requested-pager" class="pager"></div>
+          <ul id="staff-requested-list" class="book-list" style="padding:0; list-style:none;"></ul>
         </div>
 
-        <div class="manage-books" style="padding: 1.5rem;">
-          <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="ri-book-mark-line" style="color: var(--dark);"></i> Currently Issued</h3>
-          <ul id="staff-picked-up-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+        <div class="manage-books" style="padding:1.5rem;">
+          <h3 style="margin-top:0; display:flex; gap:0.5rem; align-items:center;"><i class="ri-book-mark-line" style="color:var(--dark);"></i> Currently Issued</h3>
+          <div class="mini-search-row">
+            <input type="search" id="staff-picked-search" class="mini-search" placeholder="Search issued books by student or title..." oninput="searchStaffPicked(event)">
+            <select id="staff-picked-filter" class="filter-select small-inline" onchange="onStaffPickedFilterChange(event)">
+              <option value="all">All</option>
+              <option value="overdue">Overdue</option>
+              <option value="due-soon">Due Soon</option>
+            </select>
+            <button class="mini-clear" title="Clear" onclick="clearStaffPickedSearch()"><i class="ri-close-line"></i></button>
+          </div>
+          <div id="staff-picked-pager" class="pager"></div>
+          <ul id="staff-picked-up-list" class="book-list" style="padding:0; list-style:none;"></ul>
         </div>
       </div>
 
       <div class="manage-books">
-        <h3 style="display: flex; align-items: center; gap: 0.5rem;"><i class="ri-edit-2-line" style="color: var(--primary);"></i> Manage Inventory</h3>
+        <h3 style="display:flex; gap:0.5rem; align-items:center;"><i class="ri-edit-2-line" style="color:var(--primary);"></i> Manage Inventory</h3>
+        <div class="mini-search-row">
+          <input type="search" id="staff-all-search" class="mini-search" placeholder="Search inventory by title or ID..." oninput="searchStaffAll(event)">
+          <select id="staff-all-category" class="filter-select" onchange="onStaffAllCategoryChange(event)">
+            <option value="All">All Categories</option>
+          </select>
+          <select id="staff-all-stock" class="filter-select small-inline" onchange="onStaffAllStockChange(event)">
+            <option value="any">Any Stock</option>
+            <option value="in">In Stock</option>
+            <option value="low">Low Stock (<=2)</option>
+            <option value="out">Out of Stock</option>
+          </select>
+          <button class="mini-clear" title="Clear" onclick="clearStaffAllSearch()"><i class="ri-close-line"></i></button>
+        </div>
         <form id="add-book-form" class="add-book-form" onsubmit="return addBook(event)">
           <input type="text" id="new-book-title" placeholder="Book Title" required>
           <input type="text" id="new-book-author" placeholder="Author" required>
@@ -632,129 +507,539 @@
           <input type="number" id="new-book-stock" placeholder="Qty" min="0" required>
           <button type="submit" class="btn-success"><i class="ri-add-line"></i> Add</button>
         </form>
+
+        <div class="action-group" style="margin-bottom:1rem;">
+          <button class="btn-json" onclick="downloadData()" title="Export full state as JSON">
+            <i class="ri-file-download-line"></i> Export JSON
+          </button>
+
+          <button class="btn-history-xls" onclick="exportHistoryExcel()" title="Export borrow/return history as Excel">
+            <i class="ri-file-excel-2-line"></i> Export History (Excel)
+          </button>
+
+          <!-- New: Export current (filtered) stocks as CSV -->
+          <button class="btn-history-xls" onclick="exportCurrentStocksCSV()" title="Export current filtered stocks as CSV">
+            <i class="ri-download-line"></i> Export Stocks (CSV)
+          </button>
+
+          <label class="btn-import-json" title="Import full state from JSON">
+            <i class="ri-upload-cloud-line"></i> Import JSON
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImportFile(event)">
+          </label>
+
+          <label class="btn-import-xls" title="Import stock updates from Excel/CSV">
+            <i class="ri-folder-add-line"></i> Import Stocks (Excel)
+            <input type="file" id="import-stock-excel" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleImportStockExcel(event)">
+          </label>
+        </div>
+
         <h4>All Books</h4>
-        <ul id="staff-all-books-list" class="book-list" style="padding: 0; list-style: none;"></ul>
+        <div id="staff-all-pager" class="pager"></div>
+        <ul id="staff-all-books-list" class="book-list" style="padding:0; list-style:none;"></ul>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 BMSIT&M Library. Designed for Students & Staff.</p>
+    <p>&copy; 2025 BMSIT&amp;M Library. Designed for Students & Staff.</p>
   </footer>
 
   <!-- UI Components -->
   <div id="toast-container"></div>
 
-  <div id="app-modal" class="modal">
+  <div id="app-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
         <h3 id="modal-title">Details</h3>
-        <i class="ri-close-line" style="cursor: pointer; font-size: 1.5rem;" onclick="closeModal()"></i>
+        <i class="ri-close-line" style="cursor:pointer; font-size:1.5rem;" onclick="closeModal()" role="button" aria-label="Close modal"></i>
       </div>
-      <div id="modal-body"></div>
+      <div id="modal-body" class="modal-body"></div>
       <div id="modal-footer" class="modal-footer"></div>
     </div>
   </div>
 
+  <!-- SheetJS for Excel import/export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
   <script>
-    /* --- Configuration & State --- */
+    /* --- Configuration & State (improved) --- */
     const bookCategories = ['Computer Science', 'AI/ML', 'Electronics', 'Management', 'Other'];
     let allBooks = [];
     let issuedBooks = [];
-    let requestedBooks = [];
+    let requestedBooks = []; // waitlist entries: { bookId, studentId, requestDate, expiryDate }
+    let history = []; // borrow history & fine records
+
+    // notifications now have: { id, title, msg, type, date, audience: 'student'|'staff'|'all', seenBy: [] }
+    let notifications = [];
     let currentUser = null;
-    
-    // Restocking State
+
     let currentRestockBookId = null;
     let currentRestockStudentId = null;
 
-    // UI State
+    // student filters
     let currentStudentCategoryFilter = 'All';
     let currentStudentSearchQuery = '';
-    let currentStaffSearchQuery = '';
+    let currentStudentSort = 'az'; // az, za, most, least
 
-    /* --- Initialization --- */
-    document.addEventListener('DOMContentLoaded', () => {
-      loadDataFromLocalStorage();
-      showSection('home');
-    });
+    // per-section staff search queries and filters
+    let currentStaffPickupQuery = '';
+    let currentStaffReturnQuery = '';
+    let currentStaffRequestedQuery = '';
+    let currentStaffPickedQuery = '';
+    let currentStaffAllQuery = '';
 
-    /* --- Storage Logic --- */
-    function saveDataToLocalStorage() {
-      localStorage.setItem('libraryAllBooks', JSON.stringify(allBooks));
-      localStorage.setItem('libraryIssuedBooks', JSON.stringify(issuedBooks));
-      localStorage.setItem('libraryRequestedBooks', JSON.stringify(requestedBooks));
+    let currentStaffPickupFilterType = 'all'; // expired, expiring-soon
+    let currentStaffReturnFilterType = 'all'; // overdue, due-soon
+    let currentStaffRequestedFilterType = 'all'; // recent
+    let currentStaffPickedFilterType = 'all'; // overdue, due-soon
+    let currentStaffAllCategoryFilter = 'All';
+    let currentStaffAllStockFilter = 'any'; // any, in, low, out
+    let currentStaffAllSort = 'title-az'; // title-az, title-za, stock-most, stock-least
+
+    const REQUEST_EXPIRY_DAYS = 7;
+    const MAX_ISSUED_PER_STUDENT = 4;
+    const FINE_PER_DAY = 5;
+    const PICKUP_EXPIRE_DAYS = 3; // days given for pending pickup before auto-reassign
+
+    const pagination = {
+      pageSize: 10,
+      state: {
+        studentIssued: 1,
+        studentAvailable: 1,
+        studentHistory: 1,
+        staffPickup: 1,
+        staffReturn: 1,
+        staffRequested: 1,
+        staffPicked: 1,
+        staffAll: 1
+      }
+    };
+
+    // For undo delete
+    const pendingDeletes = new Map(); // bookId -> {book, timeoutId}
+
+    // Save scheduling to reduce localStorage thrash
+    let saveScheduled = false;
+    function scheduleSave() {
+      if (saveScheduled) return;
+      saveScheduled = true;
+      const doSave = () => { saveDataToLocalStorage(); saveScheduled = false; };
+      if (typeof requestIdleCallback === 'function') requestIdleCallback(doSave, { timeout: 1000 });
+      else setTimeout(doSave, 300);
     }
 
-    function loadDataFromLocalStorage() {
-      const storedAll = localStorage.getItem('libraryAllBooks');
-      const storedIssued = localStorage.getItem('libraryIssuedBooks');
-      const storedRequested = localStorage.getItem('libraryRequestedBooks');
+    /* --- Safe helpers --- */
+    function escapeHTML (str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
-      if (storedAll && storedIssued) {
-        allBooks = JSON.parse(storedAll);
-        issuedBooks = JSON.parse(storedIssued);
-        requestedBooks = storedRequested ? JSON.parse(storedRequested) : [];
-      } else {
-        // Seed Data
-        allBooks = [
-          { id: 1, title: 'Database System Concepts', author: 'Silberschatz', category: 'Computer Science', totalStock: 5 },
-          { id: 2, title: 'Operating System Concepts', author: 'Silberschatz', category: 'Computer Science', totalStock: 3 },
-          { id: 3, title: 'Deep Learning', author: 'Ian Goodfellow', category: 'AI/ML', totalStock: 4 },
-          { id: 4, title: 'Intro to Algorithms', author: 'Cormen', category: 'Computer Science', totalStock: 2 },
-          { id: 5, title: 'Clean Code', author: 'Robert C. Martin', category: 'Computer Science', totalStock: 0 },
-          { id: 6, title: 'Microelectronic Circuits', author: 'Sedra', category: 'Electronics', totalStock: 4 }
-        ];
-        const pastDate = new Date(); pastDate.setDate(pastDate.getDate() - 5);
-        const futureDate = new Date(); futureDate.setDate(futureDate.getDate() + 10);
-        issuedBooks = [
-          { issueId: 101, bookId: 1, studentId: 'student', dueDate: pastDate.toISOString().split('T')[0], status: 'Picked Up' },
-          { issueId: 102, bookId: 3, studentId: 'another-student', dueDate: futureDate.toISOString().split('T')[0], status: 'Picked Up' },
-          { issueId: 103, bookId: 2, studentId: 'student', dueDate: null, status: 'Pending Pickup' }
-        ];
-        saveDataToLocalStorage();
+    /* --- Theme toggle helper (small) --- */
+    function toggleTheme() {
+      const current = document.body.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', next);
+      localStorage.setItem('libraryTheme', next);
+      const icon = document.getElementById('theme-icon'); if (icon) icon.className = next === 'dark' ? 'ri-moon-line' : 'ri-sun-line';
+    }
+
+    /* --- Notifications: add, render, mark-seen, clear --- */
+    function addNotification(title, msg, type='info', audience='all') {
+      // audience = 'student' | 'staff' | 'all'
+      const now = new Date();
+      notifications.push({
+        id: Date.now() + Math.floor(Math.random()*1000),
+        title: String(title || ''),
+        msg: String(msg || ''),
+        type,
+        date: now.toISOString().split('T')[0],
+        audience: audience || 'all',
+        seenBy: [] // array of identifiers (user id strings or 'guest')
+      });
+      scheduleSave();
+      renderHeader();
+    }
+
+    function getCurrentNotifierId() {
+      return currentUser ? (currentUser.id || currentUser.role) : 'guest';
+    }
+
+    function getVisibleNotificationsForCurrent() {
+      const role = currentUser ? currentUser.role : null;
+      return notifications.filter(n => n.audience === 'all' || (role && n.audience === role));
+    }
+
+    function getUnseenCountForCurrent() {
+      const id = getCurrentNotifierId();
+      const visible = getVisibleNotificationsForCurrent();
+      return visible.reduce((acc, n) => acc + (Array.isArray(n.seenBy) && n.seenBy.includes(id) ? 0 : 1), 0);
+    }
+
+    function markVisibleNotificationsSeen() {
+      const id = getCurrentNotifierId();
+      let changed = false;
+      notifications.forEach(n => {
+        if (n.audience === 'all' || (currentUser && n.audience === currentUser.role)) {
+          n.seenBy = n.seenBy || [];
+          if (!n.seenBy.includes(id)) {
+            n.seenBy.push(id);
+            changed = true;
+          }
+        }
+      });
+      if (changed) {
+        scheduleSave();
+        renderHeader();
       }
     }
 
-    function getAvailableStock(bookId) {
-      const book = allBooks.find(b => b.id === bookId);
-      if (!book) return 0;
-      const issuedCount = issuedBooks.filter(issue => issue.bookId === bookId).length;
-      return book.totalStock - issuedCount;
+    function clearNotifications() {
+      // remove visible notifications for the current role (or all if guest)
+      const before = notifications.length;
+      if (currentUser) {
+        notifications = notifications.filter(n => !(n.audience === 'all' || n.audience === currentUser.role));
+      } else {
+        notifications = notifications.filter(n => n.audience !== 'all'); // guest clears 'all' only
+      }
+      if (notifications.length !== before) {
+        scheduleSave();
+      }
+      renderHeader();
+      // close dropdown
+      const nd = document.getElementById('notif-dropdown'); if (nd) nd.classList.remove('active');
     }
 
-    /* --- Navigation & Menu Logic --- */
+    /* --- Toast (escaped content) --- */
+    function showToast(msg, type = 'info', duration = 3000) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      let icon = 'ri-information-line';
+      if (type === 'success') { icon = 'ri-checkbox-circle-line'; toast.style.borderLeftColor = 'var(--secondary)'; }
+      if (type === 'error') { icon = 'ri-error-warning-line'; toast.style.borderLeftColor = 'var(--danger)'; }
+      if (type === 'warning') { icon = 'ri-alert-line'; toast.style.borderLeftColor = 'var(--warning)'; }
+      toast.innerHTML = `<i class="${icon}" style="font-size:1.2rem; color:var(--text)"></i><span>${escapeHTML(msg)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+      return toast;
+    }
+
+    function showActionToast(msg, actionText, actionCallback, duration = 8000) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<i class="ri-information-line" style="font-size:1.2rem; color:var(--text)"></i><div style="flex:1;"><span>${escapeHTML(msg)}</span></div>`;
+      const btn = document.createElement('button');
+      btn.className = 'btn-outline';
+      btn.style.padding = '0.35rem 0.6rem';
+      btn.style.fontSize = '0.9rem';
+      btn.innerText = actionText;
+      btn.onclick = () => {
+        try { actionCallback(); } catch (err) { console.error(err); }
+        toast.remove();
+      };
+      toast.appendChild(btn);
+      container.appendChild(toast);
+      const timeout = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+      return { toast, timeout };
+    }
+
+    /* --- Storage --- */
+    function saveDataToLocalStorage() {
+      try {
+        localStorage.setItem('libraryAllBooks', JSON.stringify(allBooks));
+        localStorage.setItem('libraryIssuedBooks', JSON.stringify(issuedBooks));
+        localStorage.setItem('libraryRequestedBooks', JSON.stringify(requestedBooks));
+        localStorage.setItem('libraryHistory', JSON.stringify(history));
+        localStorage.setItem('libraryNotifications', JSON.stringify(notifications));
+        if (currentUser) localStorage.setItem('libraryCurrentUser', JSON.stringify(currentUser));
+        else localStorage.removeItem('libraryCurrentUser');
+      } catch (err) {
+        console.error('Failed to save to localStorage', err);
+      }
+    }
+
+    function loadDataFromLocalStorage() {
+      const sAll = localStorage.getItem('libraryAllBooks');
+      const sIssued = localStorage.getItem('libraryIssuedBooks');
+      const sReq = localStorage.getItem('libraryRequestedBooks');
+      const sHist = localStorage.getItem('libraryHistory');
+      const sNot = localStorage.getItem('libraryNotifications');
+      if (sAll && sIssued) {
+        try {
+          allBooks = JSON.parse(sAll);
+          issuedBooks = JSON.parse(sIssued);
+          requestedBooks = sReq ? JSON.parse(sReq) : [];
+          history = sHist ? JSON.parse(sHist) : [];
+          notifications = sNot ? JSON.parse(sNot) : [];
+        } catch (err) {
+          console.error('Error parsing saved data, reseeding', err);
+          seedDefaults();
+        }
+      } else {
+        seedDefaults();
+      }
+    }
+
+    function seedDefaults() {
+      allBooks = [
+        { id:1, title:'Database System Concepts', author:'Silberschatz', category:'Computer Science', totalStock:5 },
+        { id:2, title:'Operating System Concepts', author:'Silberschatz', category:'Computer Science', totalStock:3 },
+        { id:3, title:'Deep Learning', author:'Ian Goodfellow', category:'AI/ML', totalStock:4 },
+        { id:4, title:'Intro to Algorithms', author:'Cormen', category:'Computer Science', totalStock:2 },
+        { id:5, title:'Clean Code', author:'Robert C. Martin', category:'Computer Science', totalStock:0 },
+        { id:6, title:'Microelectronic Circuits', author:'Sedra', category:'Electronics', totalStock:4 }
+      ];
+      const past = new Date(); past.setDate(past.getDate()-5);
+      const future = new Date(); future.setDate(future.getDate()+10);
+      issuedBooks = [
+        { issueId:101, bookId:1, studentId:'student', dueDate: past.toISOString().split('T')[0], status:'Picked Up' },
+        { issueId:102, bookId:3, studentId:'another-student', dueDate: future.toISOString().split('T')[0], status:'Picked Up' },
+        { issueId:103, bookId:2, studentId:'student', dueDate: null, status:'Pending Pickup', pickupExpiry: null }
+      ];
+      requestedBooks = [];
+      history = [];
+      notifications = [];
+      saveDataToLocalStorage();
+    }
+
+    /* --- utils --- */
+    function getAvailableStock(bookId) {
+      const b = allBooks.find(x => x.id === bookId);
+      if (!b) return 0;
+      const issuedCount = issuedBooks.filter(i => i.bookId === bookId && i.status !== 'Pending Return').length;
+      return b.totalStock - issuedCount;
+    }
+
+    /* Build the filtered inventory using current staff filters (used by export) */
+    function getFilteredInventoryForExport() {
+      let arr = allBooks.slice();
+      const q = (currentStaffAllQuery || '').trim().toLowerCase();
+      if (q) {
+        arr = arr.filter(book => {
+          return (book.title && book.title.toLowerCase().includes(q)) || String(book.id) === q;
+        });
+      }
+      if (currentStaffAllCategoryFilter && currentStaffAllCategoryFilter !== 'All') {
+        arr = arr.filter(b => b.category === currentStaffAllCategoryFilter);
+      }
+      if (currentStaffAllStockFilter && currentStaffAllStockFilter !== 'any') {
+        arr = arr.filter(b => {
+          const stock = getAvailableStock(b.id);
+          if (currentStaffAllStockFilter === 'in') return stock > 0;
+          if (currentStaffAllStockFilter === 'low') return stock <= 2;
+          if (currentStaffAllStockFilter === 'out') return stock <= 0;
+          return true;
+        });
+      }
+      // apply sorting if any
+      if (currentStaffAllSort === 'title-az') arr.sort((a,b) => a.title.localeCompare(b.title));
+      else if (currentStaffAllSort === 'title-za') arr.sort((a,b) => b.title.localeCompare(a.title));
+      else if (currentStaffAllSort === 'stock-most') arr.sort((a,b) => getAvailableStock(b.id) - getAvailableStock(a.id));
+      else if (currentStaffAllSort === 'stock-least') arr.sort((a,b) => getAvailableStock(a.id) - getAvailableStock(b.id));
+      return arr;
+    }
+
+    /* --- CSV Export: current filtered inventory --- */
+    function exportCurrentStocksCSV() {
+      if (!currentUser || currentUser.role !== 'staff') return showToast('Only staff may export data', 'warning');
+      const rows = getFilteredInventoryForExport();
+      if (!rows || !rows.length) return showToast('No books to export (check filters)', 'info');
+
+      // build CSV header + rows
+      const headers = ['ID','Title','Author','Category','TotalStock','AvailableStock'];
+      const escapeCSV = (val) => {
+        if (val === null || val === undefined) return '';
+        const s = String(val);
+        if (s.includes('"') || s.includes(',') || s.includes('\n')) {
+          return `"${s.replace(/"/g, '""')}"`;
+        }
+        return s;
+      };
+      const lines = [];
+      lines.push(headers.join(','));
+      rows.forEach(b => {
+        const available = getAvailableStock(b.id);
+        const line = [
+          escapeCSV(b.id),
+          escapeCSV(b.title),
+          escapeCSV(b.author),
+          escapeCSV(b.category),
+          escapeCSV(b.totalStock),
+          escapeCSV(available)
+        ].join(',');
+        lines.push(line);
+      });
+
+      const csv = lines.join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const datepart = new Date().toISOString().split('T')[0];
+      a.download = `library-stocks-${datepart}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast('Stocks exported (CSV)', 'success');
+    }
+
+    /* --- Header render (safe) --- */
+    function renderNotifications() {
+      const list = document.getElementById('notif-list');
+      if (!list) return;
+      list.innerHTML = '';
+      const visible = getVisibleNotificationsForCurrent();
+      if (!visible.length) {
+        const empty = document.createElement('div');
+        empty.style.padding = '1rem';
+        empty.style.color = 'var(--muted)';
+        empty.textContent = 'No notifications';
+        list.appendChild(empty);
+        return;
+      }
+      visible.slice().reverse().forEach(n => {
+        const div = document.createElement('div');
+        div.className = 'notif-item';
+        const inner = document.createElement('div');
+        inner.style.flex = '1';
+        const strong = document.createElement('strong'); strong.textContent = n.title;
+        const small = document.createElement('small'); small.style.color = 'var(--muted)'; small.textContent = n.date;
+        const p = document.createElement('div'); p.style.color = 'var(--muted)'; p.style.fontSize = '0.9rem'; p.style.marginTop = '4px'; p.textContent = n.msg;
+        inner.appendChild(strong);
+        inner.appendChild(small);
+        inner.appendChild(p);
+
+        // mark visually if seen
+        const id = getCurrentNotifierId();
+        const seen = Array.isArray(n.seenBy) && n.seenBy.includes(id);
+        if (!seen) {
+          const dot = document.createElement('span');
+          dot.style.background = 'var(--primary)';
+          dot.style.width = '8px';
+          dot.style.height = '8px';
+          dot.style.display = 'inline-block';
+          dot.style.borderRadius = '50%';
+          dot.style.marginLeft = '8px';
+          inner.appendChild(dot);
+        }
+
+        div.appendChild(inner);
+        list.appendChild(div);
+      });
+    }
+
+    function renderHeader() {
+      const pn = document.getElementById('profile-name');
+      const pr = document.getElementById('profile-role');
+      const pe = document.getElementById('profile-email');
+      const notifCountEl = document.getElementById('notif-count');
+
+      if (currentUser) {
+        pn.textContent = currentUser.id;
+        pr.textContent = currentUser.role === 'student' ? 'Student' : 'Staff';
+        pe.textContent = `${currentUser.id}@bmsit.ac.in`;
+        document.getElementById('nav-login-btn').style.display = 'none';
+        document.getElementById('nav-logout-btn').style.display = 'inline-flex';
+        document.getElementById('nav-dashboard-link').style.display = 'inline-flex';
+        document.getElementById('mobile-login-btn').style.display = 'none';
+        document.getElementById('mobile-logout-btn').style.display = 'inline-flex';
+        document.getElementById('mobile-dash-link').style.display = 'block';
+      } else {
+        pn.textContent = '';
+        pr.textContent = 'Guest';
+        pe.textContent = 'Not logged in';
+        document.getElementById('nav-login-btn').style.display = 'inline-flex';
+        document.getElementById('nav-logout-btn').style.display = 'none';
+        document.getElementById('nav-dashboard-link').style.display = 'none';
+        document.getElementById('mobile-login-btn').style.display = 'inline-flex';
+        document.getElementById('mobile-logout-btn').style.display = 'none';
+        document.getElementById('mobile-dash-link').style.display = 'none';
+      }
+
+      // update notification count for current viewer
+      const unseen = getUnseenCountForCurrent();
+      if (unseen > 0 && notifCountEl) {
+        notifCountEl.style.display = 'inline-block';
+        notifCountEl.textContent = unseen;
+      } else if (notifCountEl) {
+        notifCountEl.style.display = 'none';
+      }
+      renderNotifications();
+      renderStudentFineSummary();
+    }
+
+    function toggleNotifDropdown(e) {
+      e.stopPropagation();
+      const dd = document.getElementById('notif-dropdown');
+      const isActive = dd.classList.toggle('active');
+      document.getElementById('profile-menu').classList.remove('active');
+      renderNotifications();
+      if (isActive) {
+        // mark visible notifications as seen for this viewer and update count
+        markVisibleNotificationsSeen();
+        // after marking seen, set count to zero in UI
+        const notifCountEl = document.getElementById('notif-count'); if (notifCountEl) notifCountEl.style.display = 'none';
+      }
+    }
+
+    function toggleProfileMenu(e) {
+      e.stopPropagation();
+      const pm = document.getElementById('profile-menu');
+      pm.classList.toggle('active');
+      document.getElementById('notif-dropdown').classList.remove('active');
+    }
+    document.addEventListener('click', () => {
+      const nd = document.getElementById('notif-dropdown');
+      const pm = document.getElementById('profile-menu');
+      if (nd) nd.classList.remove('active');
+      if (pm) pm.classList.remove('active');
+    });
+
+    /* --- Navigation & menu --- */
     function showSection(id) {
       closeMenu();
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       const el = document.getElementById(id);
-      if(el) el.classList.add('active');
-      
+      if (el) el.classList.add('active');
       if (id !== 'login') {
-        document.getElementById('student-login').style.display = 'none';
-        document.getElementById('staff-login').style.display = 'none';
-        document.getElementById('role-selection').style.display = 'flex';
+        const st = document.getElementById('student-login');
+        const sf = document.getElementById('staff-login');
+        if (st) st.style.display = 'none';
+        if (sf) sf.style.display = 'none';
+        const rs = document.getElementById('role-selection');
+        if (rs) rs.style.display = 'flex';
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
     function toggleMenu() {
       const menu = document.querySelector('.mobile-menu');
       const overlay = document.querySelector('.menu-overlay');
-      if (menu.classList.contains('active')) {
-        menu.classList.remove('active');
-        overlay.classList.remove('active');
-      } else {
-        menu.classList.add('active');
-        overlay.classList.add('active');
-      }
+      if (menu.classList.contains('active')) { menu.classList.remove('active'); overlay.classList.remove('active'); }
+      else { menu.classList.add('active'); overlay.classList.add('active'); }
     }
-
     function closeMenu() {
-      document.querySelector('.mobile-menu').classList.remove('active');
-      document.querySelector('.menu-overlay').classList.remove('active');
+      const menu = document.querySelector('.mobile-menu');
+      const overlay = document.querySelector('.menu-overlay');
+      if (menu) menu.classList.remove('active');
+      if (overlay) overlay.classList.remove('active');
     }
-
     function navTo(id) { showSection(id); }
     function navToDashboard() { showDashboard(); }
     function doLogout() { logout(); }
@@ -767,48 +1052,41 @@
     }
 
     function login(role) {
-      const username = document.getElementById(`${role}-username`).value;
+      const username = document.getElementById(`${role}-username`).value.trim();
       const password = document.getElementById(`${role}-password`).value;
       const msgEl = document.getElementById(`${role}-message`);
-
       const validCreds = { student: { u: 'student', p: 'student123' }, staff: { u: 'staff', p: 'staff123' } };
-
       if (username === validCreds[role].u && password === validCreds[role].p) {
         currentUser = { id: username, role: role };
-        document.getElementById('nav-login-btn').style.display = 'none';
-        document.getElementById('nav-logout-btn').style.display = 'inline-flex';
-        document.getElementById('nav-dashboard-link').style.display = 'inline-flex';
-        
-        document.getElementById('mobile-login-btn').style.display = 'none';
-        document.getElementById('mobile-logout-btn').style.display = 'inline-flex';
-        document.getElementById('mobile-dash-link').style.display = 'block';
-
+        scheduleSave();
         currentStudentCategoryFilter = 'All';
         currentStudentSearchQuery = '';
-        currentStaffSearchQuery = '';
-        document.getElementById('student-search-bar').value = '';
-        document.getElementById('staff-search-bar').value = '';
-
-        showToast(`Welcome back, ${role}!`, 'success');
+        currentStudentSort = 'az';
+        // clear per-section staff searches on login
+        currentStaffPickupQuery = '';
+        currentStaffReturnQuery = '';
+        currentStaffRequestedQuery = '';
+        currentStaffPickedQuery = '';
+        currentStaffAllQuery = '';
+        ['staff-pickup-search','staff-return-search','staff-requested-search','staff-picked-search','staff-all-search'].forEach(id => {
+          const el = document.getElementById(id); if (el) el.value = '';
+        });
+        const sbar = document.getElementById('student-search-bar'); if (sbar) sbar.value = '';
+        // targeted notification: only to the role who logged in
+        addNotification('Login', `Welcome back, ${role}!`, 'success', role);
+        renderHeader();
         showDashboard();
       } else {
-        msgEl.style.display = 'block';
-        msgEl.innerText = 'Invalid credentials';
+        if (msgEl) { msgEl.style.display = 'block'; msgEl.innerText = 'Invalid credentials'; }
         showToast('Login failed', 'error');
       }
-      return false; 
+      return false;
     }
 
     function logout() {
       currentUser = null;
-      document.getElementById('nav-login-btn').style.display = 'inline-flex';
-      document.getElementById('nav-logout-btn').style.display = 'none';
-      document.getElementById('nav-dashboard-link').style.display = 'none';
-      
-      document.getElementById('mobile-login-btn').style.display = 'inline-flex';
-      document.getElementById('mobile-logout-btn').style.display = 'none';
-      document.getElementById('mobile-dash-link').style.display = 'none';
-
+      localStorage.removeItem('libraryCurrentUser');
+      renderHeader();
       showSection('home');
       showToast('Logged out successfully', 'info');
     }
@@ -816,230 +1094,604 @@
     function showDashboard() {
       if (!currentUser) return;
       if (currentUser.role === 'student') {
+        pagination.state.studentIssued = 1;
+        pagination.state.studentAvailable = 1;
+        pagination.state.studentHistory = 1;
         renderStudentDashboard();
         showSection('student-dashboard');
       } else {
+        Object.keys(pagination.state).forEach(k => { if (k.startsWith('staff')) pagination.state[k] = 1; });
         renderStaffDashboard();
         showSection('staff-dashboard');
       }
     }
 
-    /* --- Student Logic --- */
+    /* --- Pagination helpers --- */
+    function paginateArray(arr, page, pageSize) {
+      const total = arr.length;
+      const pages = Math.max(1, Math.ceil(total / pageSize));
+      const current = Math.min(Math.max(1, page), pages);
+      const start = (current - 1) * pageSize;
+      const end = start + pageSize;
+      return { page: current, pages, items: arr.slice(start, end), total };
+    }
+
+    function renderPager(containerId, key, totalItems) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+      const page = pagination.state[key] || 1;
+      const pageSize = pagination.pageSize;
+      const pages = Math.max(1, Math.ceil(totalItems / pageSize));
+      const sizeSelect = document.createElement('select');
+      sizeSelect.style.marginRight = '0.5rem';
+      [10,20,50].forEach(n => {
+        const opt = document.createElement('option'); opt.value = n; opt.innerText = `${n}/page`;
+        if (n === pageSize) opt.selected = true;
+        sizeSelect.appendChild(opt);
+      });
+      sizeSelect.onchange = (e) => { pagination.pageSize = parseInt(e.target.value); pagination.state[key] = 1; refreshCurrentView(); };
+      container.appendChild(sizeSelect);
+
+      const prev = document.createElement('button'); prev.innerText = 'Prev'; prev.onclick = () => { if (pagination.state[key] > 1) { pagination.state[key]--; refreshCurrentView(); } };
+      container.appendChild(prev);
+
+      const startPage = Math.max(1, page - 2); const endPage = Math.min(pages, startPage + 4);
+      for (let i = startPage; i <= endPage; i++) {
+        const pn = document.createElement('div'); pn.className = `page-num ${i === page ? 'active' : ''}`; pn.innerText = i; pn.onclick = () => { pagination.state[key] = i; refreshCurrentView(); };
+        container.appendChild(pn);
+      }
+
+      const next = document.createElement('button'); next.innerText = 'Next'; next.onclick = () => { if (pagination.state[key] < pages) { pagination.state[key]++; refreshCurrentView(); } };
+      container.appendChild(next);
+
+      const info = document.createElement('div'); info.style.marginLeft = '0.75rem'; info.style.color = 'var(--muted)'; info.style.fontSize = '0.9rem'; info.innerText = `Page ${page} / ${pages}`;
+      container.appendChild(info);
+    }
+
+    function refreshCurrentView() {
+      if (document.getElementById('student-dashboard').classList.contains('active')) renderStudentDashboard();
+      else if (document.getElementById('staff-dashboard').classList.contains('active')) renderStaffDashboard();
+      else renderHeader();
+    }
+
+    /* --- Fine helpers --- */
+    function computeFineForIssue(issue) {
+      if (!issue || !issue.dueDate) return 0;
+      const due = new Date(issue.dueDate);
+      const today = new Date();
+      const diff = Math.floor((today - due) / (1000*60*60*24));
+      return diff > 0 ? diff * FINE_PER_DAY : 0;
+    }
+
+    function renderStudentFineSummary() {
+      const el = document.getElementById('student-fine-summary');
+      if (!el) return;
+      if (!currentUser || currentUser.role !== 'student') { el.innerText = ''; return; }
+      const myIssued = issuedBooks.filter(b => b.studentId === currentUser.id && b.status === 'Picked Up');
+      const totalFine = myIssued.reduce((acc, i) => acc + computeFineForIssue(i), 0);
+      el.innerText = totalFine > 0 ? `Outstanding Fine: ₹${totalFine}` : 'No outstanding fines';
+    }
+
+    /* --- Assign from waitlist (robust) --- */
+    function canStudentAcceptBook(studentId, bookId) {
+      const hasThis = issuedBooks.some(i => i.studentId === studentId && i.bookId === bookId && i.status !== 'Pending Return');
+      if (hasThis) return false;
+      const active = issuedBooks.filter(i => i.studentId === studentId && i.status !== 'Pending Return').length;
+      if (active >= MAX_ISSUED_PER_STUDENT) return false;
+      return true;
+    }
+
+    function assignFromWaitlist(bookId) {
+      requestedBooks.sort((a,b) => new Date(a.requestDate) - new Date(b.requestDate));
+      let available = getAvailableStock(bookId);
+      if (available <= 0) return;
+      let changed = false;
+      let i = 0;
+      while (i < requestedBooks.length && available > 0) {
+        const r = requestedBooks[i];
+        if (r.bookId !== bookId) { i++; continue; }
+        const studentId = r.studentId;
+        if (canStudentAcceptBook(studentId, bookId)) {
+          const issueId = Date.now() + Math.floor(Math.random()*1000);
+          const pickupExpiry = new Date(); pickupExpiry.setDate(pickupExpiry.getDate() + PICKUP_EXPIRE_DAYS);
+          issuedBooks.push({ issueId, bookId, studentId, status: 'Pending Pickup', dueDate: null, pickupExpiry: pickupExpiry.toISOString().split('T')[0] });
+          requestedBooks.splice(i, 1);
+          scheduleSave();
+          addNotification('Assigned from Waitlist', `Book "${escapeHTML((allBooks.find(b=>b.id===bookId)||{}).title || '')}" assigned to ${escapeHTML(studentId)} (pending pickup)`, 'success', 'student');
+          showToast(`Assigned "${(allBooks.find(b=>b.id===bookId)||{}).title}" to ${studentId}`, 'success');
+          available--;
+          changed = true;
+        } else {
+          requestedBooks.splice(i, 1);
+          addNotification('Waitlist Skipped', `Skipped ${escapeHTML(studentId)} for "${escapeHTML((allBooks.find(b=>b.id===bookId)||{}).title || '')}"`, 'info', 'staff');
+          scheduleSave();
+          changed = true;
+        }
+      }
+      if (changed) {
+        renderStudentDashboard();
+        renderStaffDashboard();
+      }
+    }
+
+    /* --- Auto-expire pending pickups and expired requests --- */
+    function autoExpireRequests() {
+      const today = new Date().toISOString().split('T')[0];
+      const before = requestedBooks.length;
+      requestedBooks = requestedBooks.filter(r => !(r.expiryDate && r.expiryDate < today));
+      if (requestedBooks.length !== before) {
+        scheduleSave();
+        renderStaffDashboard();
+        renderStudentDashboard();
+      }
+    }
+
+    function autoExpirePendingPickups() {
+      const today = new Date().toISOString().split('T')[0];
+      let changed = false;
+      const expired = issuedBooks.filter(i => i.status === 'Pending Pickup' && i.pickupExpiry && i.pickupExpiry < today);
+      expired.forEach(e => {
+        issuedBooks = issuedBooks.filter(x => x.issueId !== e.issueId);
+        addNotification('Pickup Expired', `Pending pickup for ${escapeHTML(e.studentId)} (book ID ${escapeHTML(String(e.bookId))}) expired. Reassigning...`, 'warning', 'staff');
+        changed = true;
+        assignFromWaitlist(e.bookId);
+      });
+      if (changed) {
+        scheduleSave();
+        renderStaffDashboard();
+        renderStudentDashboard();
+      }
+    }
+
+    /* --- Student Actions & Render (escaped) --- */
     function renderStudentDashboard() {
+      if (!currentUser || currentUser.role !== 'student') return;
       const issuedEl = document.getElementById('student-issued-list');
       const availableEl = document.getElementById('student-available-list');
+      const historyEl = document.getElementById('student-history-list');
       const tabsEl = document.getElementById('category-tabs');
-      const query = currentStudentSearchQuery;
+      const query = (currentStudentSearchQuery || '').toLowerCase();
 
-      issuedEl.innerHTML = '';
+      // update quota UI
+      const myActiveCount = issuedBooks.filter(b => b.studentId === currentUser.id && b.status !== 'Pending Return').length;
+      const quotaText = document.getElementById('quota-text');
+      const quotaFill = document.getElementById('quota-fill');
+      if (quotaText) quotaText.innerText = `${myActiveCount} / ${MAX_ISSUED_PER_STUDENT}`;
+      if (quotaFill) quotaFill.style.width = `${Math.min(100, (myActiveCount / MAX_ISSUED_PER_STUDENT) * 100)}%`;
+
+      // ISSUED
       const myBooks = issuedBooks.filter(b => b.studentId === currentUser.id);
       const filteredMyBooks = myBooks.filter(issue => {
         const book = allBooks.find(b => b.id === issue.bookId);
-        return book && (book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query));
+        return book && (book.title.toLowerCase().includes(query));
       });
-
-      if (filteredMyBooks.length === 0) {
-        issuedEl.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--gray);">No issued books found.</div>`;
+      const pagIssued = paginateArray(filteredMyBooks, pagination.state.studentIssued, pagination.pageSize);
+      issuedEl.innerHTML = '';
+      if (!pagIssued.items.length) {
+        issuedEl.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--muted)">No issued books found.</div>`;
       } else {
-        filteredMyBooks.forEach(issue => {
+        const frag = document.createDocumentFragment();
+        pagIssued.items.forEach(issue => {
           const book = allBooks.find(b => b.id === issue.bookId);
           const isPending = issue.status === 'Pending Pickup';
-          const isOverdue = !isPending && (new Date(issue.dueDate) < new Date());
+          const isOverdue = !isPending && (issue.dueDate && new Date(issue.dueDate) < new Date());
           const isReturning = issue.status === 'Pending Return';
-
-          let statusHTML = `<span>Due: ${issue.dueDate || 'N/A'}</span>`;
-          let btnHTML = '';
-          let badge = '';
-
-          if (isPending) {
-            statusHTML = `<span class="stock-badge low">Pending Pickup</span>`;
-            btnHTML = `<button class="btn-danger" onclick="cancelIssueRequest(event, ${issue.issueId})">Cancel</button>`;
-          } else if (isReturning) {
-            statusHTML = `<span class="stock-badge low">Returning...</span>`;
-            btnHTML = `<button class="btn-outline" disabled>Pending</button>`;
-          } else {
-            if (isOverdue) { statusHTML += `<span class="stock-badge low" style="margin-left: 5px">OVERDUE</span>`; }
-            else { statusHTML += `<span class="stock-badge ok">Active</span>`; }
-            btnHTML = `<button class="btn-warning" onclick="returnBook(event, ${issue.issueId})"><i class="ri-arrow-left-line"></i> Return</button>`;
-          }
-
+          const fine = computeFineForIssue(issue);
           const li = document.createElement('li');
-          li.className = `book-item ${isPending || isReturning ? 'pending' : ''} ${isOverdue ? 'overdue' : ''}`;
+          li.className = `book-item ${isPending || isReturning ? 'pending' : ''} ${isOverdue ? 'overdue':''}`;
           li.onclick = () => showBookDetails(book.id);
-          li.innerHTML = `
-            <i class="ri-book-2-line book-icon"></i>
-            <div class="book-info">
-              <strong>${book.title}</strong>
-              <span>${book.author}</span>
-              ${statusHTML}
-            </div>
-            <div class="book-action">${btnHTML}</div>
-          `;
-          issuedEl.appendChild(li);
+          const left = document.createElement('div'); left.innerHTML = '<i class="ri-book-2-line book-icon"></i>';
+          const info = document.createElement('div'); info.className = 'book-info';
+          const strong = document.createElement('strong'); strong.textContent = book.title;
+          const span = document.createElement('span'); span.textContent = book.author;
+          info.appendChild(strong); info.appendChild(span);
+          let statusHTML = document.createElement('div');
+          if (isPending) statusHTML.innerHTML = `<span class="stock-badge low">Pending Pickup</span>` + (issue.pickupExpiry ? `<small style="margin-left:8px;color:var(--muted)">Pickup by ${escapeHTML(issue.pickupExpiry)}</small>` : '');
+          else if (isReturning) statusHTML.innerHTML = `<span class="stock-badge low">Returning...</span>`;
+          else {
+            if (isOverdue) statusHTML.innerHTML = `<span>Due: ${escapeHTML(issue.dueDate || 'N/A')}</span><span class="stock-badge low" style="margin-left:5px">OVERDUE</span><span style="margin-left:8px; font-weight:700; color:var(--danger)">₹${escapeHTML(String(fine))}</span>`;
+            else statusHTML.innerHTML = `<span>Due: ${escapeHTML(issue.dueDate || 'N/A')}</span><span class="stock-badge ok" style="margin-left:8px">Active</span>`;
+          }
+          info.appendChild(statusHTML);
+          const action = document.createElement('div'); action.className = 'book-action';
+          if (isPending) {
+            const btn = document.createElement('button'); btn.className = 'btn-danger'; btn.textContent = 'Cancel'; btn.onclick = (e) => cancelIssueRequest(e, issue.issueId);
+            action.appendChild(btn);
+          } else if (isReturning) {
+            const btn = document.createElement('button'); btn.className = 'btn-outline'; btn.disabled = true; btn.textContent = 'Pending';
+            action.appendChild(btn);
+          } else {
+            if (isOverdue) {
+              const btn1 = document.createElement('button'); btn1.className = 'btn-warning'; btn1.innerHTML = '<i class="ri-arrow-left-line"></i> Return'; btn1.onclick = (e) => returnBook(e, issue.issueId);
+              const btn2 = document.createElement('button'); btn2.className = 'btn-outline'; btn2.textContent = 'Calc Fine'; btn2.onclick = () => openFineCalculator(issue.issueId);
+              action.appendChild(btn1); action.appendChild(btn2);
+            } else {
+              const btn = document.createElement('button'); btn.className = 'btn-warning'; btn.innerHTML = '<i class="ri-arrow-left-line"></i> Return'; btn.onclick = (e) => returnBook(e, issue.issueId);
+              action.appendChild(btn);
+            }
+          }
+          li.appendChild(left); li.appendChild(info); li.appendChild(action);
+          frag.appendChild(li);
         });
+        issuedEl.appendChild(frag);
       }
+      renderPager('student-issued-pager', 'studentIssued', filteredMyBooks.length);
 
+      // CATEGORY TABS (keep them, but also sync with select)
       tabsEl.innerHTML = '';
       const createTab = (cat) => {
         const btn = document.createElement('button');
         btn.className = `tab-button ${currentStudentCategoryFilter === cat ? 'active' : ''}`;
         btn.innerText = cat;
-        btn.onclick = () => { currentStudentCategoryFilter = cat; renderStudentDashboard(); };
+        btn.onclick = () => { currentStudentCategoryFilter = cat; document.getElementById('student-category-select').value = cat; pagination.state.studentAvailable = 1; renderStudentDashboard(); };
         return btn;
       };
       tabsEl.appendChild(createTab('All'));
       bookCategories.forEach(cat => tabsEl.appendChild(createTab(cat)));
 
-      availableEl.innerHTML = '';
-      const myActiveIds = issuedBooks.filter(b => b.studentId === currentUser.id).map(b => b.bookId);
-      const myRequestedIds = requestedBooks.filter(r => r.studentId === currentUser.id).map(r => r.bookId);
+      // populate student category select (if not already)
+      const studentCatSelect = document.getElementById('student-category-select');
+      if (studentCatSelect && studentCatSelect.options.length <= 1) {
+        studentCatSelect.innerHTML = '<option value="All">All Categories</option>';
+        bookCategories.forEach(c => {
+          const opt = document.createElement('option'); opt.value = c; opt.innerText = c; studentCatSelect.appendChild(opt);
+        });
+        studentCatSelect.value = currentStudentCategoryFilter || 'All';
+      }
 
-      const filteredBooks = allBooks.filter(book => {
-        const matchSearch = book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query);
+      // AVAILABLE (only search by title - not author) + apply category filter + sorting
+      availableEl.innerHTML = '';
+      const myActiveIds = issuedBooks.filter(b => b.studentId === currentUser.id && b.status !== 'Pending Return').map(b => b.bookId);
+      const myRequestedIds = requestedBooks.filter(r => r.studentId === currentUser.id).map(r => r.bookId);
+      let filteredBooks = allBooks.filter(book => {
+        const matchSearch = book.title.toLowerCase().includes(query);
         const matchCat = currentStudentCategoryFilter === 'All' || book.category === currentStudentCategoryFilter;
         const notOwned = !myActiveIds.includes(book.id);
         return matchSearch && matchCat && notOwned;
       });
 
-      if (filteredBooks.length === 0) {
-        availableEl.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--gray);">No matching books found.</div>`;
+      // Sorting
+      filteredBooks.sort((a,b) => {
+        if (currentStudentSort === 'az') return a.title.localeCompare(b.title);
+        if (currentStudentSort === 'za') return b.title.localeCompare(a.title);
+        if (currentStudentSort === 'most') return getAvailableStock(b.id) - getAvailableStock(a.id);
+        if (currentStudentSort === 'least') return getAvailableStock(a.id) - getAvailableStock(b.id);
+        return 0;
+      });
+
+      const pagAvailable = paginateArray(filteredBooks, pagination.state.studentAvailable, pagination.pageSize);
+      if (!pagAvailable.items.length) {
+        availableEl.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--muted)">No matching books found.</div>`;
       } else {
-        filteredBooks.forEach(book => {
+        const frag = document.createDocumentFragment();
+        pagAvailable.items.forEach(book => {
           const stock = getAvailableStock(book.id);
           const isRequested = myRequestedIds.includes(book.id);
           const isOutOfStock = stock <= 0;
-
-          let btnHTML = '';
-          let stockText = `Stock: ${stock}`;
-          let badgeClass = stock > 0 ? 'ok' : 'low';
-          let badgeHTML = `<span class="stock-badge ${badgeClass}">${stockText}</span>`;
-
-          if (isRequested) {
-            btnHTML = `<button class="btn-danger" onclick="removeRequest(event, ${book.id})">Cancel Req</button>`;
-            badgeHTML = `<span class="stock-badge low">Requested</span>`;
-          } else if (isOutOfStock) {
-            btnHTML = `<button class="btn-warning" onclick="requestBook(event, ${book.id})">Request</button>`;
-            badgeHTML = `<span class="stock-badge low">Out of Stock</span>`;
-          } else {
-            btnHTML = `<button class="btn-success" onclick="issueBook(event, ${book.id})"><i class="ri-add-line"></i> Issue</button>`;
-          }
-
           const li = document.createElement('li');
-          li.className = 'book-item';
-          li.onclick = () => showBookDetails(book.id);
-          li.innerHTML = `
-            <i class="ri-book-open-line book-icon"></i>
-            <div class="book-info">
-              <strong>${book.title}</strong>
-              <span>${book.author} • ${book.category}</span>
-              ${badgeHTML}
-            </div>
-            <div class="book-action">${btnHTML}</div>
-          `;
-          availableEl.appendChild(li);
+          li.className = 'book-item'; li.onclick = () => showBookDetails(book.id);
+          const left = document.createElement('div'); left.innerHTML = '<i class="ri-book-open-line book-icon"></i>';
+          const info = document.createElement('div'); info.className = 'book-info';
+          const strong = document.createElement('strong'); strong.textContent = book.title;
+          const span = document.createElement('span'); span.textContent = `${book.author} • ${book.category}`;
+          info.appendChild(strong); info.appendChild(span);
+          const badge = document.createElement('div'); badge.innerHTML = `<span class="stock-badge ${stock>0?'ok':'low'}">${stock>0? 'Stock: ' + escapeHTML(String(stock)) : 'Out of Stock'}</span>`;
+          info.appendChild(badge);
+          const action = document.createElement('div'); action.className = 'book-action';
+          if (isRequested) {
+            const btn = document.createElement('button'); btn.className = 'btn-danger'; btn.textContent = 'Cancel Req'; btn.onclick = (e) => removeRequest(e, book.id, currentUser.id);
+            action.appendChild(btn);
+          } else if (isOutOfStock) {
+            const btn = document.createElement('button'); btn.className = 'btn-warning'; btn.textContent = 'Request Restock'; btn.onclick = (e) => requestBook(e, book.id);
+            action.appendChild(btn);
+          } else {
+            const btn = document.createElement('button'); btn.className = 'btn-success'; btn.innerHTML = '<i class="ri-add-line"></i> Issue'; btn.onclick = (e) => issueBook(e, book.id);
+            action.appendChild(btn);
+          }
+          li.appendChild(left); li.appendChild(info); li.appendChild(action);
+          frag.appendChild(li);
         });
+        availableEl.appendChild(frag);
       }
+      renderPager('student-available-pager', 'studentAvailable', filteredBooks.length);
+
+      // HISTORY
+      historyEl.innerHTML = '';
+      const myHistory = history.filter(h => h.studentId === currentUser.id).slice().reverse();
+      const pagHistory = paginateArray(myHistory, pagination.state.studentHistory, pagination.pageSize);
+      if (!pagHistory.items.length) {
+        historyEl.innerHTML = `<div style="text-align:center; padding:1rem; color:var(--muted)">No borrow history.</div>`;
+      } else {
+        const frag = document.createDocumentFragment();
+        pagHistory.items.forEach(h => {
+          const book = allBooks.find(b => b.id === h.bookId) || { title: h.title || 'Unknown' };
+          const li = document.createElement('li'); li.className = 'book-item';
+          const info = document.createElement('div'); info.className = 'book-info';
+          const strong = document.createElement('strong'); strong.textContent = book.title;
+          const span = document.createElement('span'); span.textContent = `Borrowed: ${h.issueDate} • Returned: ${h.returnDate || 'N/A'}`;
+          info.appendChild(strong); info.appendChild(span);
+          li.appendChild(info);
+          frag.appendChild(li);
+        });
+        historyEl.appendChild(frag);
+      }
+      renderPager('student-history-pager', 'studentHistory', myHistory.length);
+      renderStudentFineSummary();
     }
 
-    /* --- Staff Logic --- */
+    /* --- Staff Logic (uses per-section queries + filters) --- */
     function renderStaffDashboard() {
+      if (!currentUser || currentUser.role !== 'staff') return;
       const pickupEl = document.getElementById('staff-pickup-list');
       const returnEl = document.getElementById('staff-return-list');
       const requestedEl = document.getElementById('staff-requested-list');
       const pickedUpEl = document.getElementById('staff-picked-up-list');
       const allBooksEl = document.getElementById('staff-all-books-list');
       const catDropdown = document.getElementById('new-book-category');
-      const query = currentStaffSearchQuery;
 
-      const renderList = (items, el, type) => {
+      // helper filters that respect per-section queries
+      const filterPending = (arr, query) => arr.filter(item => {
+        const book = allBooks.find(b => b.id === item.bookId);
+        const sId = (item.studentId || '').toLowerCase();
+        const bTitle = book ? (book.title || '').toLowerCase() : '';
+        return sId.includes(query) || bTitle.includes(query);
+      });
+
+      const filterInventory = (arr, query) => arr.filter(book => {
+        const q = query.trim();
+        if (!q) return true;
+        const ql = q.toLowerCase();
+        // Inventory search: title and ID only (explicitly not author per request)
+        return (book.title && book.title.toLowerCase().includes(ql)) ||
+               (String(book.id) === q);
+      });
+
+      const pickupItems = issuedBooks.filter(b => b.status === 'Pending Pickup');
+      const returnItems = issuedBooks.filter(b => b.status === 'Pending Return');
+      const requestedItems = requestedBooks;
+      const pickedItems = issuedBooks.filter(b => b.status === 'Picked Up');
+      const allItems = allBooks;
+
+      // apply per-section queries
+      const pickupFilteredBase = filterPending(pickupItems, (currentStaffPickupQuery || '').toLowerCase());
+      const returnFilteredBase = filterPending(returnItems, (currentStaffReturnQuery || '').toLowerCase());
+      const requestedFilteredBase = requestedItems.filter(r => {
+        const book = allBooks.find(b => b.id === r.bookId);
+        const bTitle = (book && book.title || '').toLowerCase();
+        const sId = (r.studentId || '').toLowerCase();
+        const q = (currentStaffRequestedQuery || '').toLowerCase();
+        return bTitle.includes(q) || sId.includes(q);
+      });
+      const pickedFilteredBase = pickedItems.filter(i => {
+        const book = allBooks.find(b => b.id === i.bookId);
+        const bTitle = (book && book.title || '').toLowerCase();
+        const sId = (i.studentId || '').toLowerCase();
+        const q = (currentStaffPickedQuery || '').toLowerCase();
+        return bTitle.includes(q) || sId.includes(q);
+      });
+      let allFilteredBase = filterInventory(allItems, (currentStaffAllQuery || '').toLowerCase());
+
+      // Now apply additional staff filters (category/stock for inventory; overdue/due-soon for picked/return; expired for pickups)
+      // Pickups filter
+      const todayStr = new Date().toISOString().split('T')[0];
+      const pickupFiltered = pickupFilteredBase.filter(item => {
+        if (currentStaffPickupFilterType === 'expired') {
+          return item.pickupExpiry && item.pickupExpiry < todayStr;
+        } else if (currentStaffPickupFilterType === 'expiring-soon') {
+          if (!item.pickupExpiry) return false;
+          const expiry = new Date(item.pickupExpiry);
+          const now = new Date();
+          const diff = Math.ceil((expiry - now)/(1000*60*60*24));
+          return diff >= 0 && diff <= 2; // expiring in 2 days
+        }
+        return true;
+      });
+
+      // Returns filter
+      const returnFiltered = returnFilteredBase.filter(item => {
+        if (currentStaffReturnFilterType === 'overdue') {
+          return item.dueDate && new Date(item.dueDate) < new Date();
+        } else if (currentStaffReturnFilterType === 'due-soon') {
+          if (!item.dueDate) return false;
+          const due = new Date(item.dueDate);
+          const now = new Date();
+          const diff = Math.ceil((due - now)/(1000*60*60*24));
+          return diff >= 0 && diff <= 3;
+        }
+        return true;
+      });
+
+      // Requested filter
+      const requestedFiltered = requestedFilteredBase.filter(r => {
+        if (currentStaffRequestedFilterType === 'recent') {
+          const reqDate = new Date(r.requestDate);
+          const now = new Date();
+          const diff = Math.floor((now - reqDate)/(1000*60*60*24));
+          return diff <= 7;
+        }
+        return true;
+      });
+
+      // Picked (issued) filter
+      const pickedFiltered = pickedFilteredBase.filter(item => {
+        if (currentStaffPickedFilterType === 'overdue') {
+          return item.dueDate && new Date(item.dueDate) < new Date();
+        } else if (currentStaffPickedFilterType === 'due-soon') {
+          if (!item.dueDate) return false;
+          const due = new Date(item.dueDate);
+          const now = new Date();
+          const diff = Math.ceil((due - now)/(1000*60*60*24));
+          return diff >= 0 && diff <= 3;
+        }
+        return true;
+      });
+
+      // Inventory category and stock filters
+      allFilteredBase = allFilteredBase.filter(book => {
+        if (currentStaffAllCategoryFilter && currentStaffAllCategoryFilter !== 'All') {
+          if (book.category !== currentStaffAllCategoryFilter) return false;
+        }
+        if (currentStaffAllStockFilter && currentStaffAllStockFilter !== 'any') {
+          const stock = getAvailableStock(book.id);
+          if (currentStaffAllStockFilter === 'in' && stock <= 0) return false;
+          if (currentStaffAllStockFilter === 'low' && stock > 2) return false;
+          if (currentStaffAllStockFilter === 'out' && stock > 0) return false;
+        }
+        return true;
+      });
+
+      // Inventory sorting
+      if (currentStaffAllSort === 'title-az') {
+        allFilteredBase.sort((a,b) => a.title.localeCompare(b.title));
+      } else if (currentStaffAllSort === 'title-za') {
+        allFilteredBase.sort((a,b) => b.title.localeCompare(a.title));
+      } else if (currentStaffAllSort === 'stock-most') {
+        allFilteredBase.sort((a,b) => getAvailableStock(b.id) - getAvailableStock(a.id));
+      } else if (currentStaffAllSort === 'stock-least') {
+        allFilteredBase.sort((a,b) => getAvailableStock(a.id) - getAvailableStock(b.id));
+      }
+
+      // existing renderList logic (keeps same look)
+      const renderList = (items, el, type, pagerKey, filteredItems) => {
         el.innerHTML = '';
-        const filtered = items.filter(item => {
-          const book = allBooks.find(b => b.id === (item.bookId || item.id));
-          const sId = (item.studentId || '').toLowerCase();
-          const bTitle = book ? book.title.toLowerCase() : '';
-          return sId.includes(query) || bTitle.includes(query);
-        });
-
-        if (filtered.length === 0) {
-          el.innerHTML = `<div style="text-align:center; padding: 1rem; color: var(--gray); font-size: 0.9rem;">No items.</div>`;
+        const pag = paginateArray(filteredItems, pagination.state[pagerKey], pagination.pageSize);
+        const slice = pag.items;
+        if (!slice.length) {
+          el.innerHTML = `<div style="text-align:center; padding:1rem; color:var(--muted); font-size:0.9rem;">No items.</div>`;
+          renderPager(getPagerIdForKey(pagerKey), pagerKey, pag.total);
           return;
         }
-
-        filtered.forEach(item => {
-          let book, content;
-          
-          if (type === 'pickup') {
-            book = allBooks.find(b => b.id === item.bookId);
-            content = `
-              <div class="book-info"><strong>${book.title}</strong><span>Student: ${item.studentId}</span><span class="stock-badge low">Pending Pickup</span></div>
-              <div class="book-action"><button class="btn-success" onclick="confirmPickup(event, ${item.issueId})">Give</button></div>`;
-          } else if (type === 'return') {
-            book = allBooks.find(b => b.id === item.bookId);
-            content = `
-              <div class="book-info"><strong>${book.title}</strong><span>Student: ${item.studentId}</span><span class="stock-badge low">Returned</span></div>
-              <div class="book-action"><button class="btn-success" onclick="confirmReturn(event, ${item.issueId})">Confirm</button></div>`;
-          } else if (type === 'requested') {
-            book = allBooks.find(b => b.id === item.bookId);
-            content = `
-              <div class="book-info"><strong>${book.title}</strong><span>Student: ${item.studentId}</span><span>Date: ${item.requestDate}</span></div>
-              <div class="book-action">
-                <button class="btn-success" onclick="openRestockModal(event, ${item.bookId}, '${item.studentId}')">Restock</button>
-              </div>`;
-          } else if (type === 'pickedup') {
-            book = allBooks.find(b => b.id === item.bookId);
-            const isOverdue = new Date(item.dueDate) < new Date();
-            const badge = isOverdue ? 'low' : 'ok';
-            const status = isOverdue ? 'OVERDUE' : 'Active';
-            content = `
-              <div class="book-info"><strong>${book.title}</strong><span>Student: ${item.studentId}</span><span>Due: ${item.dueDate}</span><span class="stock-badge ${badge}">${status}</span></div>
-              <div class="book-action"><i class="ri-check-double-line" style="color:var(--success); font-size:1.2rem;"></i></div>`;
-          } else if (type === 'all') {
-            book = item;
-            const stock = getAvailableStock(book.id);
-            content = `
-              <div class="book-info"><strong>${book.title}</strong><span>Auth: ${book.author} • ID: ${book.id}</span><span class="stock-badge ${stock > 0 ? 'ok' : 'low'}">Stock: ${stock}/${book.totalStock}</span></div>
-              <div class="book-action">
-                <button class="btn-primary" onclick="editBook(event, ${book.id})"><i class="ri-pencil-line"></i></button>
-                <button class="btn-danger" onclick="deleteBook(event, ${book.id})"><i class="ri-delete-bin-line"></i></button>
-              </div>`;
-          }
-
+        const frag = document.createDocumentFragment();
+        slice.forEach(item => {
           const li = document.createElement('li');
-          li.className = `book-item ${type === 'pickedup' && new Date(item.dueDate) < new Date() ? 'overdue' : ''} ${['pickup','return','requested'].includes(type) ? 'pending' : ''}`;
-          li.innerHTML = content;
-          if (type !== 'pickup' && type !== 'return' && type !== 'requested') li.onclick = () => showBookDetails(book.id);
-          el.appendChild(li);
+          li.className = 'book-item';
+          if (type === 'pickup') {
+            const book = allBooks.find(b => b.id === item.bookId) || {};
+            const info = document.createElement('div'); info.className = 'book-info';
+            const strong = document.createElement('strong'); strong.textContent = book.title || 'Unknown';
+            const span = document.createElement('span'); span.textContent = `Student: ${item.studentId}`;
+            const badge = document.createElement('span'); badge.className = 'stock-badge low'; badge.textContent = 'Pending Pickup';
+            info.appendChild(strong); info.appendChild(span); info.appendChild(badge);
+            const action = document.createElement('div'); action.className = 'book-action';
+            const btn = document.createElement('button'); btn.className = 'btn-success'; btn.textContent = 'Give'; btn.onclick = (e) => confirmPickup(e, item.issueId);
+            action.appendChild(btn);
+            li.appendChild(info); li.appendChild(action);
+          } else if (type === 'return') {
+            const book = allBooks.find(b => b.id === item.bookId) || {};
+            const info = document.createElement('div'); info.className = 'book-info';
+            const strong = document.createElement('strong'); strong.textContent = book.title || 'Unknown';
+            const span = document.createElement('span'); span.textContent = `Student: ${item.studentId}`;
+            const badge = document.createElement('span'); badge.className = 'stock-badge low'; badge.textContent = 'Returned';
+            info.appendChild(strong); info.appendChild(span); info.appendChild(badge);
+            const action = document.createElement('div'); action.className = 'book-action';
+            const btn = document.createElement('button'); btn.className = 'btn-success'; btn.textContent = 'Confirm'; btn.onclick = (e) => confirmReturn(e, item.issueId);
+            action.appendChild(btn);
+            li.appendChild(info); li.appendChild(action);
+          } else if (type === 'requested') {
+            const book = allBooks.find(b => b.id === item.bookId) || {};
+            const info = document.createElement('div'); info.className = 'book-info';
+            const strong = document.createElement('strong'); strong.textContent = book.title || 'Unknown';
+            const span = document.createElement('span'); span.textContent = `Student: ${item.studentId}`;
+            const date = document.createElement('span'); date.textContent = `Date: ${item.requestDate}`;
+            info.appendChild(strong); info.appendChild(span); info.appendChild(date);
+            const action = document.createElement('div'); action.className = 'book-action';
+            const btn1 = document.createElement('button'); btn1.className = 'btn-success'; btn1.textContent = 'Restock'; btn1.onclick = (e) => openRestockModal(e, item.bookId, item.studentId);
+            const btn2 = document.createElement('button'); btn2.className = 'btn-outline'; btn2.textContent = 'Remove'; btn2.onclick = (e) => removeRequest(e, item.bookId, item.studentId);
+            action.appendChild(btn1); action.appendChild(btn2);
+            li.appendChild(info); li.appendChild(action);
+          } else if (type === 'pickedup') {
+            const book = allBooks.find(b => b.id === item.bookId) || {};
+            const info = document.createElement('div'); info.className = 'book-info';
+            const strong = document.createElement('strong'); strong.textContent = book.title || 'Unknown';
+            const span = document.createElement('span'); span.textContent = `Student: ${item.studentId}`;
+            const dueSpan = document.createElement('span'); dueSpan.textContent = `Due: ${item.dueDate || 'N/A'}`;
+            const isOverdue = item.dueDate && new Date(item.dueDate) < new Date();
+            const badge = document.createElement('span'); badge.className = `stock-badge ${isOverdue ? 'low' : 'ok'}`; badge.textContent = isOverdue ? 'OVERDUE' : 'Active';
+            info.appendChild(strong); info.appendChild(span); info.appendChild(dueSpan); info.appendChild(badge);
+            const action = document.createElement('div'); action.className = 'book-action';
+            if (isOverdue) {
+              const btn = document.createElement('button'); btn.className = 'btn-outline'; btn.textContent = 'Calc Fine'; btn.onclick = () => openFineCalculator(item.issueId);
+              action.appendChild(btn);
+            }
+            const icon = document.createElement('i'); icon.className = 'ri-check-double-line'; icon.style.color = 'var(--secondary)'; icon.style.fontSize = '1.2rem';
+            action.appendChild(icon);
+            li.appendChild(info); li.appendChild(action);
+          } else if (type === 'all') {
+            const book = item;
+            const info = document.createElement('div'); info.className = 'book-info';
+            const strong = document.createElement('strong'); strong.textContent = book.title;
+            const span = document.createElement('span'); span.textContent = `Auth: ${book.author} • ID: ${book.id}`;
+            const stockSpan = document.createElement('span'); stockSpan.className = 'stock-badge ' + (getAvailableStock(book.id) > 0 ? 'ok' : 'low'); stockSpan.textContent = `Stock: ${getAvailableStock(book.id)}/${book.totalStock}`;
+            info.appendChild(strong); info.appendChild(span); info.appendChild(stockSpan);
+            const action = document.createElement('div'); action.className = 'book-action';
+            const editBtn = document.createElement('button'); editBtn.className = 'btn-primary'; editBtn.innerHTML = '<i class="ri-pencil-line"></i>'; editBtn.onclick = (e) => editBook(e, book.id);
+            const delBtn = document.createElement('button'); delBtn.className = 'btn-danger'; delBtn.innerHTML = '<i class="ri-delete-bin-line"></i>'; delBtn.onclick = (e) => deleteBookWithUndo(e, book.id);
+            action.appendChild(editBtn); action.appendChild(delBtn);
+            li.appendChild(info); li.appendChild(action);
+            li.onclick = () => showBookDetails(book.id);
+          }
+          frag.appendChild(li);
         });
+        el.appendChild(frag);
+        renderPager(getPagerIdForKey(pagerKey), pagerKey, pag.total);
       };
 
-      renderList(issuedBooks.filter(b => b.status === 'Pending Pickup'), pickupEl, 'pickup');
-      renderList(issuedBooks.filter(b => b.status === 'Pending Return'), returnEl, 'return');
-      renderList(requestedBooks, requestedEl, 'requested');
-      renderList(issuedBooks.filter(b => b.status === 'Picked Up'), pickedUpEl, 'pickedup');
-      renderList(allBooks, allBooksEl, 'all');
+      renderList(pickupItems, pickupEl, 'pickup', 'staffPickup', pickupFiltered);
+      renderList(returnItems, returnEl, 'return', 'staffReturn', returnFiltered);
+      renderList(requestedItems, requestedEl, 'requested', 'staffRequested', requestedFiltered);
+      renderList(pickedItems, pickedUpEl, 'pickedup', 'staffPicked', pickedFiltered);
+      renderList(allItems, allBooksEl, 'all', 'staffAll', allFilteredBase);
 
-      catDropdown.innerHTML = '<option value="" disabled selected>Select Category</option>';
-      bookCategories.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c; opt.innerText = c;
-        catDropdown.appendChild(opt);
-      });
+      // populate category dropdowns if needed
+      const newCatDropdown = document.getElementById('new-book-category');
+      if (newCatDropdown && newCatDropdown.options.length <= 1) {
+        newCatDropdown.innerHTML = '<option value="" disabled selected>Select Category</option>';
+        bookCategories.forEach(c => {
+          const opt = document.createElement('option'); opt.value = c; opt.innerText = c; newCatDropdown.appendChild(opt);
+        });
+      }
+      const staffCat = document.getElementById('staff-all-category');
+      if (staffCat && staffCat.options.length <= 1) {
+        staffCat.innerHTML = '<option value="All">All Categories</option>';
+        bookCategories.forEach(c => {
+          const opt = document.createElement('option'); opt.value = c; opt.innerText = c; staffCat.appendChild(opt);
+        });
+        staffCat.value = currentStaffAllCategoryFilter || 'All';
+      }
     }
 
-    /* --- Actions --- */
+    function getPagerIdForKey(key) {
+      return {
+        studentIssued: 'student-issued-pager',
+        studentAvailable: 'student-available-pager',
+        studentHistory: 'student-history-pager',
+        staffPickup: 'staff-pickup-pager',
+        staffReturn: 'staff-return-pager',
+        staffRequested: 'staff-requested-pager',
+        staffPicked: 'staff-picked-pager',
+        staffAll: 'staff-all-pager'
+      }[key];
+    }
+
+    /* --- Actions & rest (unchanged behavior but scheduleSave used) --- */
     function issueBook(e, id) {
       e.stopPropagation();
+      if (!currentUser || currentUser.role !== 'student') return showToast('Login as student to issue', 'warning');
+      const alreadyHasThis = issuedBooks.some(b => b.studentId === currentUser.id && b.bookId === id && b.status !== 'Pending Return');
+      if (alreadyHasThis) return showToast('You already have this book issued', 'error');
+      const activeCount = issuedBooks.filter(b => b.studentId === currentUser.id && b.status !== 'Pending Return').length;
+      if (activeCount >= MAX_ISSUED_PER_STUDENT) return showToast(`Limit reached. You may have up to ${MAX_ISSUED_PER_STUDENT} active books.`, 'error');
       if (getAvailableStock(id) <= 0) return showToast('Out of stock', 'error');
-      issuedBooks.push({
-        issueId: Date.now(),
-        bookId: id,
-        studentId: currentUser.id,
-        status: 'Pending Pickup',
-        dueDate: null
-      });
-      saveDataToLocalStorage();
+
+      issuedBooks.push({ issueId: Date.now(), bookId: id, studentId: currentUser.id, status: 'Pending Pickup', dueDate: null, pickupExpiry: null });
+      requestedBooks = requestedBooks.filter(r => !(r.bookId === id && r.studentId === currentUser.id));
+      scheduleSave();
+      pagination.state.studentAvailable = 1; pagination.state.studentIssued = 1;
       renderStudentDashboard();
-      showToast('Book issued', 'success');
+      showToast('Book issued (pending pickup)', 'success');
+      // Notify staff about this request
+      addNotification('Issue Requested', `Student ${escapeHTML(currentUser.id)} requested "${escapeHTML((allBooks.find(b=>b.id===id)||{}).title || '')}"`, 'success', 'staff');
     }
 
     function returnBook(e, issueId) {
@@ -1047,46 +1699,53 @@
       const issue = issuedBooks.find(b => b.issueId === issueId);
       if (issue) {
         issue.status = 'Pending Return';
-        saveDataToLocalStorage();
+        scheduleSave();
         renderStudentDashboard();
         showToast('Return requested', 'info');
+        addNotification('Return Requested', `Return requested by ${escapeHTML(issue.studentId)} for book ID ${escapeHTML(String(issue.bookId))}`, 'info', 'staff');
       }
     }
 
     function requestBook(e, bookId) {
       e.stopPropagation();
+      if (!currentUser) return showToast('Login to request', 'warning');
+      const stock = getAvailableStock(bookId);
+      if (stock > 0) return showToast('This book is in stock — you can issue it directly', 'warning');
       const exists = requestedBooks.some(r => r.studentId === currentUser.id && r.bookId === bookId);
-      if (exists) return;
-      requestedBooks.push({
-        bookId,
-        studentId: currentUser.id,
-        requestDate: new Date().toISOString().split('T')[0]
-      });
-      saveDataToLocalStorage();
+      if (exists) return showToast('You already requested restock for this book', 'info');
+      const reqDate = new Date(); const expiry = new Date(); expiry.setDate(expiry.getDate() + REQUEST_EXPIRY_DAYS);
+      requestedBooks.push({ bookId, studentId: currentUser.id, requestDate: reqDate.toISOString().split('T')[0], expiryDate: expiry.toISOString().split('T')[0] });
+      scheduleSave();
+      pagination.state.studentAvailable = 1;
       renderStudentDashboard();
-      showToast('Request sent', 'success');
+      showToast('Restock request sent', 'success');
+      // Notify staff of restock request
+      addNotification('Restock Requested', `Requested restock for "${escapeHTML((allBooks.find(b=>b.id===bookId)||{}).title || '')}" by ${escapeHTML(currentUser.id)}`, 'info', 'staff');
     }
 
     function cancelIssueRequest(e, issueId) {
       e.stopPropagation();
       issuedBooks = issuedBooks.filter(b => b.issueId !== issueId);
-      saveDataToLocalStorage();
+      scheduleSave();
       renderStudentDashboard();
       showToast('Request cancelled', 'info');
     }
 
     function removeRequest(e, bookId, studentId) {
       e.stopPropagation();
-      if (studentId === currentUser.id) {
+      if (!studentId && currentUser) studentId = currentUser.id;
+      if (studentId === currentUser?.id) {
         requestedBooks = requestedBooks.filter(r => !(r.bookId === bookId && r.studentId === studentId));
+        scheduleSave();
         renderStudentDashboard();
         showToast('Request cancelled', 'info');
       } else {
-        if(confirm('Mark request done?')) {
+        if (confirm('Mark request done?')) {
           requestedBooks = requestedBooks.filter(r => !(r.bookId === bookId && r.studentId === studentId));
-          saveDataToLocalStorage();
+          scheduleSave();
           renderStaffDashboard();
           showToast('Request removed', 'success');
+          addNotification('Request Removed', `Request for book ID ${escapeHTML(String(bookId))} by ${escapeHTML(studentId)} removed`, 'info', 'student');
         }
       }
     }
@@ -1098,59 +1757,89 @@
         const due = new Date(); due.setDate(due.getDate() + 14);
         issue.dueDate = due.toISOString().split('T')[0];
         issue.status = 'Picked Up';
-        saveDataToLocalStorage();
+        delete issue.pickupExpiry;
+        scheduleSave();
         renderStaffDashboard();
         showToast('Pickup confirmed', 'success');
+        addNotification('Pickup Confirmed', `Issued "${escapeHTML((allBooks.find(b=>b.id===issue.bookId)||{}).title || '')}" to ${escapeHTML(issue.studentId)}`, 'success', 'student');
       }
     }
 
     function confirmReturn(e, issueId) {
       e.stopPropagation();
+      const issue = issuedBooks.find(b => b.issueId === issueId);
+      if (!issue) return;
+      const book = allBooks.find(b => b.id === issue.bookId);
+      const now = new Date().toISOString().split('T')[0];
+      history.push({
+        issueId: issue.issueId,
+        bookId: issue.bookId,
+        title: book ? book.title : 'Unknown',
+        studentId: issue.studentId,
+        issueDate: issue.dueDate ? new Date(new Date(issue.dueDate).getTime() - 14*24*60*60*1000).toISOString().split('T')[0] : now,
+        returnDate: now
+      });
       issuedBooks = issuedBooks.filter(b => b.issueId !== issueId);
-      saveDataToLocalStorage();
+      scheduleSave();
       renderStaffDashboard();
       showToast('Return confirmed', 'success');
+      addNotification('Return Processed', `Return confirmed for "${escapeHTML(book ? book.title : 'Unknown')}"`, 'info', 'student');
     }
 
     function addBook(e) {
       e.preventDefault();
-      const title = document.getElementById('new-book-title').value;
-      const author = document.getElementById('new-book-author').value;
+      const title = document.getElementById('new-book-title').value.trim();
+      const author = document.getElementById('new-book-author').value.trim();
       const category = document.getElementById('new-book-category').value;
-      const stock = parseInt(document.getElementById('new-book-stock').value);
-
-      if(!title || !author || !category || isNaN(stock)) return showToast('Invalid input', 'error');
-
+      const stock = parseInt(document.getElementById('new-book-stock').value, 10);
+      if (!title || !author || !category || isNaN(stock)) return showToast('Invalid input', 'error');
       allBooks.push({ id: Date.now(), title, author, category, totalStock: stock });
-      saveDataToLocalStorage();
+      scheduleSave();
       document.getElementById('add-book-form').reset();
       renderStaffDashboard();
       showToast('Book added', 'success');
+      addNotification('Book Added', `${escapeHTML(title)} added to inventory`, 'success', 'staff');
     }
 
-    function deleteBook(e, id) {
+    /* --- Delete with Undo --- */
+    function deleteBookWithUndo(e, id) {
       e.stopPropagation();
-      if(issuedBooks.some(i => i.bookId === id)) return showToast('Book is issued', 'error');
-      if(confirm('Delete this book?')) {
-        allBooks = allBooks.filter(b => b.id !== id);
-        saveDataToLocalStorage();
-        renderStaffDashboard();
+      if (issuedBooks.some(i => i.bookId === id)) return showToast('Book is issued', 'error');
+      const book = allBooks.find(b => b.id === id);
+      if (!book) return;
+      // remove from UI list immediately
+      allBooks = allBooks.filter(b => b.id !== id);
+      renderStaffDashboard();
+      // keep item for undo
+      const timeoutId = setTimeout(() => {
+        pendingDeletes.delete(id);
+        scheduleSave();
         showToast('Book deleted', 'info');
-      }
+      }, 8000);
+      pendingDeletes.set(id, { book, timeoutId });
+      // show undo toast
+      showActionToast(`Deleted "${book.title}"`, 'Undo', () => {
+        const pd = pendingDeletes.get(id);
+        if (!pd) return;
+        clearTimeout(pd.timeoutId);
+        pendingDeletes.delete(id);
+        allBooks.push(pd.book);
+        scheduleSave();
+        renderStaffDashboard();
+        showToast('Delete undone', 'success');
+      }, 8000);
     }
 
-    /* --- Restocking Modal Logic --- */
+    /* --- Restock modal and assign waitlist --- */
     function openRestockModal(e, bookId, studentId) {
       e.stopPropagation();
       currentRestockBookId = bookId;
       currentRestockStudentId = studentId;
-      
-      const book = allBooks.find(b => b.id === bookId);
-      
+      const book = allBooks.find(b => b.id === bookId) || { title: 'Unknown', totalStock: 0 };
       document.getElementById('modal-title').innerText = 'Restock Book';
       document.getElementById('modal-body').innerHTML = `
-        <p>Restocking: <strong>${book.title}</strong></p>
-        <p>Current Total Stock: <strong>${book.totalStock}</strong></p>
+        <p>Restocking: <strong>${escapeHTML(book.title)}</strong></p>
+        <p>Current Total Stock: <strong>${escapeHTML(String(book.totalStock))}</strong></p>
         <label>Quantity to Add:</label>
         <input type="number" id="restock-amount" min="1" value="1" required>
       `;
@@ -1158,129 +1847,388 @@
         <button class="btn-outline" onclick="closeModal()">Cancel</button>
         <button class="btn-success" onclick="confirmRestock()">Confirm Restock</button>
       `;
-      document.getElementById('app-modal').style.display = 'block';
+      const modal = document.getElementById('app-modal'); modal.style.display = 'block'; modal.setAttribute('aria-hidden','false');
     }
 
     function confirmRestock() {
-      const amount = parseInt(document.getElementById('restock-amount').value);
+      const amount = parseInt(document.getElementById('restock-amount').value, 10);
       if (!amount || amount <= 0) return showToast('Please enter a valid quantity', 'error');
-
       const book = allBooks.find(b => b.id === currentRestockBookId);
-      if (book) {
-        book.totalStock += amount;
-        
-        // Remove the specific request that triggered this restock
-        requestedBooks = requestedBooks.filter(r => !(r.bookId === currentRestockBookId && r.studentId === currentRestockStudentId));
-        
-        saveDataToLocalStorage();
-        closeModal();
-        renderStaffDashboard();
-        showToast(`Added ${amount} copies successfully`, 'success');
-      }
+      if (!book) return;
+      book.totalStock += amount;
+      requestedBooks = requestedBooks.filter(r => !(r.bookId === currentRestockBookId && r.studentId === currentRestockStudentId));
+      scheduleSave();
+      closeModal();
+      assignFromWaitlist(currentRestockBookId);
+      renderStaffDashboard();
+      showToast(`Added ${amount} copies successfully`, 'success');
+      addNotification('Restocked', `${escapeHTML(book.title)} increased by ${escapeHTML(String(amount))}`, 'success', 'staff');
     }
 
-    /* --- Modal & Editing --- */
+    /* --- Modal & editing --- */
     function showBookDetails(bookId) {
-      const book = allBooks.find(b => b.id === bookId);
-      if(!book) return;
+      const book = allBooks.find(b => b.id === bookId) || { title: 'Unknown', author:'', category:'', totalStock:0 };
       const stock = getAvailableStock(bookId);
-      
       document.getElementById('modal-title').innerText = book.title;
       document.getElementById('modal-body').innerHTML = `
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div><strong>Author:</strong><br>${book.author}</div>
-          <div><strong>Category:</strong><br>${book.category}</div>
-          <div><strong>Total Stock:</strong><br>${book.totalStock}</div>
-          <div><strong>Available:</strong><br>${stock}</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <div><strong>Author:</strong><br>${escapeHTML(book.author)}</div>
+          <div><strong>Category:</strong><br>${escapeHTML(book.category)}</div>
+          <div><strong>Total Stock:</strong><br>${escapeHTML(String(book.totalStock))}</div>
+          <div><strong>Available:</strong><br>${escapeHTML(String(stock))}</div>
         </div>
       `;
       document.getElementById('modal-footer').innerHTML = `<button class="btn-primary" onclick="closeModal()">Close</button>`;
       document.getElementById('app-modal').style.display = 'block';
+      document.getElementById('app-modal').setAttribute('aria-hidden','false');
     }
 
     function editBook(e, id) {
       e.stopPropagation();
       const book = allBooks.find(b => b.id === id);
-      if(!book) return;
-
+      if (!book) return;
       document.getElementById('modal-title').innerText = 'Edit Book';
       document.getElementById('modal-body').innerHTML = `
-        <label>Title</label><input type="text" id="edit-title" value="${book.title}">
-        <label>Author</label><input type="text" id="edit-author" value="${book.author}">
+        <label>Title</label><input type="text" id="edit-title" value="${escapeHTML(book.title)}">
+        <label>Author</label><input type="text" id="edit-author" value="${escapeHTML(book.author)}">
         <label>Category</label>
-        <select id="edit-category">
-          ${bookCategories.map(c => `<option value="${c}" ${c===book.category?'selected':''}>${c}</option>`).join('')}
-        </select>
-        <label>Total Stock</label><input type="number" id="edit-stock" value="${book.totalStock}" min="0">
+        <select id="edit-category">${bookCategories.map(c => `<option value="${escapeHTML(c)}" ${c===book.category?'selected':''}>${escapeHTML(c)}</option>`).join('')}</select>
+        <label>Total Stock</label><input type="number" id="edit-stock" value="${escapeHTML(String(book.totalStock))}" min="0">
       `;
-      document.getElementById('modal-footer').innerHTML = `
-        <button class="btn-outline" onclick="closeModal()">Cancel</button>
-        <button class="btn-success" onclick="saveBookChanges(${id})">Save</button>
-      `;
+      document.getElementById('modal-footer').innerHTML = `<button class="btn-outline" onclick="closeModal()">Cancel</button><button class="btn-success" onclick="saveBookChanges(${id})">Save</button>`;
       document.getElementById('app-modal').style.display = 'block';
+      document.getElementById('app-modal').setAttribute('aria-hidden','false');
     }
 
     function saveBookChanges(id) {
-      const newTitle = document.getElementById('edit-title').value;
-      const newAuth = document.getElementById('edit-author').value;
+      const newTitle = document.getElementById('edit-title').value.trim();
+      const newAuth = document.getElementById('edit-author').value.trim();
       const newCat = document.getElementById('edit-category').value;
-      const newStock = parseInt(document.getElementById('edit-stock').value);
-
-      if(!newTitle || !newAuth || !newCat || isNaN(newStock)) return showToast('Fields missing', 'error');
-      
+      const newStock = parseInt(document.getElementById('edit-stock').value, 10);
+      if (!newTitle || !newAuth || !newCat || isNaN(newStock)) return showToast('Fields missing', 'error');
       const issuedCount = issuedBooks.filter(i => i.bookId === id).length;
-      if(newStock < issuedCount) return showToast(`Stock min: ${issuedCount}`, 'error');
-
+      if (newStock < issuedCount) return showToast(`Stock min: ${issuedCount}`, 'error');
       const book = allBooks.find(b => b.id === id);
       book.title = newTitle; book.author = newAuth; book.category = newCat; book.totalStock = newStock;
-      saveDataToLocalStorage();
+      scheduleSave();
       closeModal();
       renderStaffDashboard();
       showToast('Book updated', 'success');
+      addNotification('Book Updated', `${escapeHTML(newTitle)} updated`, 'info', 'staff');
     }
 
     function closeModal() {
-      document.getElementById('app-modal').style.display = 'none';
-      // Reset restock tracking
-      currentRestockBookId = null;
-      currentRestockStudentId = null;
+      const modal = document.getElementById('app-modal'); modal.style.display = 'none'; modal.setAttribute('aria-hidden','true');
+      currentRestockBookId = null; currentRestockStudentId = null;
     }
 
-    window.onclick = function(e) {
-      if (e.target == document.getElementById('app-modal')) closeModal();
-    }
+    window.onclick = function(e) { if (e.target == document.getElementById('app-modal')) closeModal(); }
 
-    /* --- Search --- */
+    /* --- Search handlers (debounced & per-section) --- */
+    let searchTimeoutStudent = null;
+    let searchTimeoutPickup = null;
+    let searchTimeoutReturn = null;
+    let searchTimeoutRequested = null;
+    let searchTimeoutPicked = null;
+    let searchTimeoutAll = null;
+
     function searchStudentDashboard(e) {
-      currentStudentSearchQuery = e.target.value.toLowerCase();
-      renderStudentDashboard();
+      if (searchTimeoutStudent) clearTimeout(searchTimeoutStudent);
+      searchTimeoutStudent = setTimeout(() => {
+        currentStudentSearchQuery = e.target.value.toLowerCase();
+        pagination.state.studentAvailable = 1; pagination.state.studentIssued = 1; pagination.state.studentHistory = 1;
+        renderStudentDashboard();
+      }, 250);
     }
-    function searchStaffDashboard(e) {
-      currentStaffSearchQuery = e.target.value.toLowerCase();
+
+    function searchStaffPickup(e) {
+      if (searchTimeoutPickup) clearTimeout(searchTimeoutPickup);
+      searchTimeoutPickup = setTimeout(() => {
+        currentStaffPickupQuery = e.target.value.toLowerCase();
+        pagination.state.staffPickup = 1;
+        renderStaffDashboard();
+      }, 250);
+    }
+    function searchStaffReturn(e) {
+      if (searchTimeoutReturn) clearTimeout(searchTimeoutReturn);
+      searchTimeoutReturn = setTimeout(() => {
+        currentStaffReturnQuery = e.target.value.toLowerCase();
+        pagination.state.staffReturn = 1;
+        renderStaffDashboard();
+      }, 250);
+    }
+    function searchStaffRequested(e) {
+      if (searchTimeoutRequested) clearTimeout(searchTimeoutRequested);
+      searchTimeoutRequested = setTimeout(() => {
+        currentStaffRequestedQuery = e.target.value.toLowerCase();
+        pagination.state.staffRequested = 1;
+        renderStaffDashboard();
+      }, 250);
+    }
+    function searchStaffPicked(e) {
+      if (searchTimeoutPicked) clearTimeout(searchTimeoutPicked);
+      searchTimeoutPicked = setTimeout(() => {
+        currentStaffPickedQuery = e.target.value.toLowerCase();
+        pagination.state.staffPicked = 1;
+        renderStaffDashboard();
+      }, 250);
+    }
+    function searchStaffAll(e) {
+      if (searchTimeoutAll) clearTimeout(searchTimeoutAll);
+      searchTimeoutAll = setTimeout(() => {
+        currentStaffAllQuery = e.target.value.toLowerCase();
+        pagination.state.staffAll = 1;
+        renderStaffDashboard();
+      }, 250);
+    }
+
+    /* --- Clear buttons for per-section searches --- */
+    function clearStaffPickupSearch() {
+      currentStaffPickupQuery = '';
+      const el = document.getElementById('staff-pickup-search'); if (el) el.value = '';
+      pagination.state.staffPickup = 1;
+      renderStaffDashboard();
+    }
+    function clearStaffReturnSearch() {
+      currentStaffReturnQuery = '';
+      const el = document.getElementById('staff-return-search'); if (el) el.value = '';
+      pagination.state.staffReturn = 1;
+      renderStaffDashboard();
+    }
+    function clearStaffRequestedSearch() {
+      currentStaffRequestedQuery = '';
+      const el = document.getElementById('staff-requested-search'); if (el) el.value = '';
+      pagination.state.staffRequested = 1;
+      renderStaffDashboard();
+    }
+    function clearStaffPickedSearch() {
+      currentStaffPickedQuery = '';
+      const el = document.getElementById('staff-picked-search'); if (el) el.value = '';
+      pagination.state.staffPicked = 1;
+      renderStaffDashboard();
+    }
+    function clearStaffAllSearch() {
+      currentStaffAllQuery = '';
+      const el = document.getElementById('staff-all-search'); if (el) el.value = '';
+      pagination.state.staffAll = 1;
       renderStaffDashboard();
     }
 
-    /* --- Toast System --- */
-    function showToast(msg, type = 'info') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = `toast`;
-      
-      let icon = 'ri-information-line';
-      if(type === 'success') { icon = 'ri-checkbox-circle-line'; toast.style.borderLeftColor = 'var(--secondary)'; }
-      if(type === 'error') { icon = 'ri-error-warning-line'; toast.style.borderLeftColor = 'var(--danger)'; }
-      if(type === 'warning') { icon = 'ri-alert-line'; toast.style.borderLeftColor = 'var(--warning)'; }
+    /* --- Filter change handlers (student + staff) --- */
+    function onStudentCategoryChange(e) {
+      currentStudentCategoryFilter = e.target.value || 'All';
+      pagination.state.studentAvailable = 1;
+      renderStudentDashboard();
+    }
+    function onStudentSortChange(e) {
+      currentStudentSort = e.target.value || 'az';
+      pagination.state.studentAvailable = 1;
+      renderStudentDashboard();
+    }
 
-      toast.innerHTML = `<i class="${icon}" style="font-size: 1.2rem; color: var(--dark);"></i> <span>${msg}</span>`;
-      container.appendChild(toast);
+    function onStaffPickupFilterChange(e) {
+      currentStaffPickupFilterType = e.target.value || 'all';
+      pagination.state.staffPickup = 1;
+      renderStaffDashboard();
+    }
+    function onStaffReturnFilterChange(e) {
+      currentStaffReturnFilterType = e.target.value || 'all';
+      pagination.state.staffReturn = 1;
+      renderStaffDashboard();
+    }
+    function onStaffRequestedFilterChange(e) {
+      currentStaffRequestedFilterType = e.target.value || 'all';
+      pagination.state.staffRequested = 1;
+      renderStaffDashboard();
+    }
+    function onStaffPickedFilterChange(e) {
+      currentStaffPickedFilterType = e.target.value || 'all';
+      pagination.state.staffPicked = 1;
+      renderStaffDashboard();
+    }
 
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
+    function onStaffAllCategoryChange(e) {
+      currentStaffAllCategoryFilter = e.target.value || 'All';
+      pagination.state.staffAll = 1;
+      renderStaffDashboard();
+    }
+    function onStaffAllStockChange(e) {
+      currentStaffAllStockFilter = e.target.value || 'any';
+      pagination.state.staffAll = 1;
+      renderStaffDashboard();
+    }
+
+    /* --- Export/import (with validation & size checks) --- */
+    function validateImportedData(parsed) {
+      if (!parsed || typeof parsed !== 'object') return false;
+      if (!Array.isArray(parsed.allBooks) || !Array.isArray(parsed.issuedBooks)) return false;
+      for (const b of parsed.allBooks) {
+        if (!b || typeof b.id !== 'number' || typeof b.title !== 'string') return false;
+      }
+      return true;
+    }
+
+    function downloadData() {
+      if (!currentUser || currentUser.role !== 'staff') return showToast('Only staff may export data', 'warning');
+      const data = { allBooks, issuedBooks, requestedBooks, history, notifications };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `library-data-${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      showToast('Data exported', 'success');
+    }
+
+    function handleImportFile(e) {
+      const file = e.target.files[0]; if (!file) return;
+      const MAX_JSON_SIZE = 2 * 1024 * 1024; // 2MB
+      if (file.size > MAX_JSON_SIZE) return showToast('File too large', 'error');
+      if (!file.name.toLowerCase().endsWith('.json')) return showToast('Only JSON files allowed', 'error');
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          if (!validateImportedData(parsed)) return showToast('Invalid JSON schema', 'error');
+          if (confirm('This will replace current data. Continue?')) {
+            allBooks = (parsed.allBooks || []).map(b => ({ id: Number(b.id) || Date.now(), title: String(b.title || '').slice(0,1000), author: String(b.author || '').slice(0,200), category: String(b.category || 'Other').slice(0,200), totalStock: Number(b.totalStock) || 0 }));
+            issuedBooks = parsed.issuedBooks || [];
+            requestedBooks = parsed.requestedBooks || [];
+            history = parsed.history || [];
+            notifications = parsed.notifications || [];
+            scheduleSave();
+            renderStaffDashboard();
+            renderHeader();
+            showToast('Data imported', 'success');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Invalid file', 'error');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    function exportHistoryExcel() {
+      if (!currentUser || currentUser.role !== 'staff') return showToast('Only staff may export data', 'warning');
+      if (!window.XLSX) return showToast('Excel export not available', 'error');
+      const ws = XLSX.utils.json_to_sheet(history.map(h => ({ IssueID:h.issueId, BookID:h.bookId, Title:h.title, StudentID:h.studentId, IssueDate:h.issueDate, ReturnDate:h.returnDate||'', FinePaid:h.finePaid||'' })));
+      const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'History'); XLSX.writeFile(wb, `borrow-history-${new Date().toISOString().split('T')[0]}.xlsx`);
+      showToast('History exported (Excel)', 'success');
+    }
+
+    function handleImportStockExcel(e) {
+      const file = e.target.files[0]; if (!file) return;
+      if (!window.XLSX) return showToast('Excel import not available', 'error');
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const data = evt.target.result;
+          const workbook = XLSX.read(data, { type: 'binary' });
+          const firstSheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[firstSheetName];
+          const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+          if (!rows || !rows.length) return showToast('No rows found in file', 'error');
+          let updated = 0, added = 0;
+          rows.forEach(r => {
+            const title = (r.title || r.Title || '').toString().trim(); if (!title) return;
+            const author = (r.author || r.Author || '').toString().trim() || 'Unknown';
+            const category = (r.category || r.Category || '').toString().trim() || 'Other';
+            let stock = parseInt(r.totalStock || r.TotalStock || r.stock || r.Stock || 0, 10); if (isNaN(stock)) stock = 0;
+            const idVal = r.id || r.ID || r.bookId || r.BookID;
+            if (idVal) {
+              const idNum = Number(idVal); const existing = allBooks.find(b => b.id === idNum);
+              if (existing) { existing.title = title; existing.author = author; existing.category = category; existing.totalStock = Number(stock); updated++; return; }
+            }
+            const existingByTA = allBooks.find(b => b.title.toLowerCase() === title.toLowerCase() && b.author.toLowerCase() === author.toLowerCase());
+            if (existingByTA) { existingByTA.totalStock = Number(stock); updated++; }
+            else { allBooks.push({ id: Date.now()+Math.floor(Math.random()*1000), title, author, category, totalStock:Number(stock) }); added++; }
+          });
+          scheduleSave(); renderStaffDashboard();
+          showToast(`Stocks imported: ${added} added, ${updated} updated`, 'success');
+          addNotification('Stocks Imported', `${added} added, ${updated} updated via Excel`, 'info', 'staff');
+        } catch (err) { console.error(err); showToast('Failed to parse Excel', 'error'); }
+      };
+      reader.readAsBinaryString(file);
+      e.target.value = '';
+    }
+
+    /* --- Auto watchers --- */
+    function periodicTasks() {
+      autoExpireRequests();
+      autoExpirePendingPickups();
+    }
+
+    /* --- Shortcuts & accessibility improvements --- */
+    function bindShortcuts() {
+      window.addEventListener('keydown', (e) => {
+        const tag = document.activeElement.tagName.toLowerCase();
+        if (tag === 'input' || tag === 'textarea' || document.activeElement.isContentEditable) {
+          if (e.key === 'Escape') document.activeElement.blur();
+          return;
+        }
+        if (e.key === '/') {
+          e.preventDefault();
+          if (document.getElementById('student-dashboard').classList.contains('active')) document.getElementById('student-search-bar').focus();
+          else if (document.getElementById('staff-dashboard').classList.contains('active')) document.getElementById('staff-pickup-search').focus();
+          else { const s = document.getElementById('student-search-bar'); if (s) s.focus(); }
+        } else if (e.key.toLowerCase() === 'd') { if (currentUser) showDashboard(); }
+        else if (e.key.toLowerCase() === 'h') showSection('home');
+        else if (e.key.toLowerCase() === 'l') showSection('login');
+      });
+    }
+
+    /* --- Cleanup pending timers on unload --- */
+    window.addEventListener('beforeunload', () => {
+      pendingDeletes.forEach(v => clearTimeout(v.timeoutId));
+    });
+
+    /* --- Init --- */
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDataFromLocalStorage();
+      const storedUser = localStorage.getItem('libraryCurrentUser');
+      if (storedUser) { try { currentUser = JSON.parse(storedUser); } catch(e) { currentUser = null; } }
+      // restore theme icon
+      const theme = localStorage.getItem('libraryTheme') || 'light';
+      document.body.setAttribute('data-theme', theme);
+      const icon = document.getElementById('theme-icon'); if (icon) icon.className = theme === 'dark' ? 'ri-moon-line' : 'ri-sun-line';
+
+      // Ensure category dropdown is populated for staff add form
+      const catDropdown = document.getElementById('new-book-category');
+      if (catDropdown) {
+        catDropdown.innerHTML = '<option value="" disabled selected>Select Category</option>';
+        bookCategories.forEach(c => {
+          const opt = document.createElement('option'); opt.value = c; opt.innerText = c; catDropdown.appendChild(opt);
+        });
+      }
+
+      // Ensure staff inventory category select exists
+      const staffAllCat = document.getElementById('staff-all-category');
+      if (staffAllCat) {
+        staffAllCat.innerHTML = '<option value="All">All Categories</option>';
+        bookCategories.forEach(c => {
+          const opt = document.createElement('option'); opt.value = c; opt.innerText = c; staffAllCat.appendChild(opt);
+        });
+      }
+
+      showSection('home');
+      bindShortcuts();
+      periodicTasks();
+      setInterval(periodicTasks, 1000 * 60 * 60); // hourly
+      renderHeader();
+      renderStudentDashboard();
+      renderStaffDashboard();
+    });
+
+    /* --- Additional function placeholders used in original UI that were not changed --- */
+    function openFineCalculator(issueId) {
+      const issue = issuedBooks.find(i => i.issueId === issueId);
+      if (!issue) return;
+      const fine = computeFineForIssue(issue);
+      document.getElementById('modal-title').innerText = 'Fine Calculator';
+      document.getElementById('modal-body').innerHTML = `<p>Outstanding fine for this issue: <strong>₹${escapeHTML(String(fine))}</strong></p>`;
+      document.getElementById('modal-footer').innerHTML = `<button class="btn-outline" onclick="closeModal()">Close</button>`;
+      document.getElementById('app-modal').style.display = 'block';
+      document.getElementById('app-modal').setAttribute('aria-hidden','false');
     }
   </script>
 </body>
 </html>
-```
